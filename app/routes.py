@@ -10,8 +10,13 @@ from flask_login import login_required
 from werkzeug.urls import url_parse
 from flask import request
 from datetime import datetime
+from datetime import timedelta
 from app.models import Box, Indication
 from app import db
+from flask import jsonify
+from sqlalchemy.sql.expression import func
+
+
 
 @app.route('/')
 @app.route('/index')
@@ -50,24 +55,102 @@ def logout():
 def add_to_db():
 	data = request.get_json()
 	
-	box = Box.query.filter_by(name = data['name']).first()
+	box = Box.query.filter_by(id_device = data['id']).first()
 	if box is not None:
 		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
 				  time = datetime.now())
 		db.session.add(ind)
 		db.session.commit()
+		
 		return "OK"
 	else:
 		return "404"
 		
 @app.route('/api/get', methods=['GET'])
-def get():
-	inds = Indication.query.all()
-	strin = ""
-	for ind in inds:
-		strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
-	return strin
+@login_required
+def get_all():
+	indications = Indication.query.all()
+	data = {}
+	indata = []
+	
+	for ind in indications:
+		indata.append({
+			"id": ind.onBox.id,
+			"temp": ind.temp,
+			"hum": ind.hum,
+			"date": ind.time.strftime("%Y-%m-%dT%H:%M:%S")
+		})
+	
+	data["data"] = indata
+	# for ind in inds:
+	# 	strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
+	return jsonify(data)
+
+@app.route('/api/get/<string:id>', methods=['GET'])
+@login_required
+def get_box(id):
+	bx = Box.query.where(Box.name==id).first()
+	#indications = Indication.query.where(Indication.id_box==bx.id)
+	indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.now()-timedelta(hours=24))
 
 	
+	data = {}
+	indata = []
 	
+	for ind in indications:
+		indata.append({
+			"id": ind.onBox.id,
+			"temp": ind.temp,
+			"hum": ind.hum,
+			"date": ind.time.strftime("%Y-%m-%dT%H:%M:%S")
+		})
+	
+	data["data"] = indata
+	# for ind in inds:
+	# 	strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
+	return jsonify(data)
 
+@app.route('/api/get/last')
+@login_required
+def get_last_all():
+	inds = db.session.query(Indication.id_box, 
+	Indication.temp, Indication.hum,
+	func.max(Indication.time).label("time")).group_by(Indication.id_box)
+
+	data = []
+
+	for i in inds:
+		data.append({
+			"id_box": i.id_box,
+			"temp": i.temp,
+			"hum": i.hum,
+			"time": i.time.strftime("%Y-%m-%dT%H:%M:%S")
+		})
+	return jsonify(data)
+
+
+@app.route('/dashboard')
+@login_required
+def dashboards():
+	inds = db.session.query(Indication.id_box, 
+	Indication.temp, Indication.hum,
+	func.max(Indication.time).label("time")).group_by(Indication.id_box)
+
+	# for i in inds:
+	# 	data.append({
+	# 		"id_box": i.id_box,
+	# 		"temp": i.temp,
+	# 		"hum": i.hum,
+	# 		"time": i.time.strftime("%Y-%m-%dT%H:%M:%S")
+	# 	})
+	return render_template('dash_def.html', objects = inds)
+
+@app.route('/dashboards')
+@login_required
+def dashboard():
+	return render_template('dashboard.html')
+
+@app.route('/last_data')
+def last_data():
+	return "Hehehe"
+	

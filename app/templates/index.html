@@ -1,7 +1,157 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    
-    
-{% endblock %}
+<html>
+    <head>
+        <title>General</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        
+        <style>
+            .navpan{
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-start;
+                background: #1e1e1e;
+                font-family: 'Rubik', sans-serif;
+                font-weight: 400;
+                font-size: 17px;
+            }
+            .navpan-item{
+                display: inline-block;
+                background: #1e1e1e;
+                color: white;
+                padding: 5px;
+                text-decoration: none;
+                /* border-radius: 5px; */
+                
+            }
+            .navpan a:hover{
+                color:white;
+            }
+            .navpan-item:hover{
+                
+                background: #313131;
+            }
+            .right{
+                margin-left: auto;
+            }
+            body{
+                background-color: #cdcdcd;
+                margin: 0;
+            }
+            .main-container{
+                position: relative;
+                width: 95%;
+                background: #e1e1e1;
+                margin-top: 20px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 10px;
+                box-shadow: 0px 0px 4px #313131;
+                padding: 10;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <svg width="56" height="53" viewBox="0 0 56 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.4898 47.0534C19.5861 48.6057 18.4897 49.0532 17.4898 49.0534" stroke="white"/>
+                    <path d="M23.4896 47.7625C23.4896 51.9143 19.7275 51.4991 19.7275 51.4991" stroke="white"/>
+                    <path d="M32.5132 48.0036C32.1802 51.5179 36.4712 51.5177 36.4712 51.5177" stroke="white"/>
+                    <path d="M1.49999 18C1.50002 20.5 3 20.5 3.99996 20.5" stroke="white"/>
+                    <path d="M4.50009 16.9999C4.5 18.5004 6.00007 18.4999 6.50015 18.5002" stroke="white"/>
+                    <line x1="32.5" y1="12" x2="32.5" y2="21" stroke="white"/>
+                    <line x1="32" y1="20.5" x2="42" y2="20.5" stroke="white"/>
+                    <line x1="41.5" y1="20" x2="41.5" y2="31" stroke="white"/>
+                    <line x1="42" y1="31.5" x2="32" y2="31.5" stroke="white"/>
+                    <line x1="32.5" y1="31" x2="32.5" y2="40" stroke="white"/>
+                    <line x1="33" y1="39.5" x2="23" y2="39.5" stroke="white"/>
+                    <line x1="32" y1="12.5" x2="23" y2="12.5" stroke="white"/>
+                    <line x1="23.5" y1="12" x2="23.5" y2="21" stroke="white"/>
+                    <line x1="23.5" y1="31" x2="23.5" y2="40" stroke="white"/>
+                    <line x1="24" y1="20.5" x2="14" y2="20.5" stroke="white"/>
+                    <line x1="14.5" y1="20" x2="14.5" y2="32" stroke="white"/>
+                    <line x1="14" y1="31.5" x2="24" y2="31.5" stroke="white"/>
+                    <line x1="23" y1="9.5" x2="33" y2="9.5" stroke="white"/>
+                    <line x1="36.5" y1="10" x2="36.5" y2="5" stroke="white"/>
+                    <path d="M38.2773 3.41602L36.2773 5.41602" stroke="white"/>
+                    <line x1="38" y1="3.5" x2="52" y2="3.5" stroke="white"/>
+                    <line x1="51.5" y1="3" x2="51.5" y2="17" stroke="white"/>
+                    <line x1="36" y1="9.5" x2="46" y2="9.5" stroke="white"/>
+                    <line x1="45.5" y1="9" x2="45.5" y2="17" stroke="white"/>
+                    <line x1="46" y1="16.5" x2="41" y2="16.5" stroke="white"/>
+                    <line x1="41.5" y1="17" x2="41.5" y2="12" stroke="white"/>
+                    <line x1="41" y1="12.5" x2="36" y2="12.5" stroke="white"/>
+                    <line x1="36.5" y1="13" x2="36.5" y2="19" stroke="white"/>
+                    <line x1="37" y1="18.5" x2="51" y2="18.5" stroke="white"/>
+                    <path d="M51.5 16.5C51.5405 18.1804 51.3291 18.5548 50.4999 18.5001" stroke="white"/>
+                    <path d="M54.4999 17.5002C54.5 20.0002 53.5 20.5 52.4999 20.5002" stroke="white"/>
+                    <line x1="45" y1="20.5" x2="53" y2="20.5" stroke="white"/>
+                    <line x1="54.5" x2="54.5" y2="18" stroke="white"/>
+                    <line x1="54" y1="0.5" x2="37" y2="0.5" stroke="white"/>
+                    <line x1="37.3123" y1="0.390434" x2="32.3123" y2="4.39043" stroke="white"/>
+                    <line x1="32.5" y1="4" x2="32.5" y2="10" stroke="white"/>
+                    <line x1="23.5" y1="4" x2="23.5" y2="10" stroke="white"/>
+                    <line x1="23.6877" y1="4.39043" x2="18.6877" y2="0.390435" stroke="white"/>
+                    <line x1="19" y1="0.5" x2="1" y2="0.5" stroke="white"/>
+                    <line x1="1.5" x2="1.5" y2="18" stroke="white"/>
+                    <line x1="18" y1="12.5" x2="14" y2="12.5" stroke="white"/>
+                    <line x1="14.5" y1="12" x2="14.5" y2="19" stroke="white"/>
+                    <line x1="15" y1="18.5" x2="20" y2="18.5" stroke="white"/>
+                    <line x1="19.5" y1="19" x2="19.5" y2="5" stroke="white"/>
+                    <line x1="19.6464" y1="5.35355" x2="17.6464" y2="3.35355" stroke="white"/>
+                    <line x1="18" y1="3.5" x2="4" y2="3.5" stroke="white"/>
+                    <line x1="4.5" y1="3" x2="4.5" y2="17" stroke="white"/>
+                    <line x1="4" y1="20.5" x2="9" y2="20.5" stroke="white"/>
+                    <line x1="17.5" y1="9" x2="17.5" y2="13" stroke="white"/>
+                    <line x1="18" y1="9.5" x2="10" y2="9.5" stroke="white"/>
+                    <line x1="9.5" y1="9" x2="9.5" y2="31" stroke="white"/>
+                    <line x1="9" y1="18.5" x2="6" y2="18.5" stroke="white"/>
+                    <line x1="45.5" y1="20" x2="45.5" y2="43" stroke="white"/>
+                    <line x1="46" y1="42.5" x2="38" y2="42.5" stroke="white"/>
+                    <line x1="42" y1="33.5" x2="36" y2="33.5" stroke="white"/>
+                    <line x1="41.5" y1="33" x2="41.5" y2="40" stroke="white"/>
+                    <line x1="42" y1="39.5" x2="38" y2="39.5" stroke="white"/>
+                    <line x1="36.5" y1="34" x2="36.5" y2="47" stroke="white"/>
+                    <line x1="38.5" y1="39" x2="38.5" y2="43" stroke="white"/>
+                    <path d="M38 49H52" stroke="white"/>
+                    <line x1="54.5" y1="35" x2="54.5" y2="52" stroke="white"/>
+                    <line x1="55" y1="51.5" x2="36" y2="51.5" stroke="white"/>
+                    <line x1="54.6" y1="35.3" x2="51.6" y2="31.3" stroke="white"/>
+                    <line x1="52" y1="31.5" x2="45" y2="31.5" stroke="white"/>
+                    <line x1="45.0017" y1="33.4917" x2="50.0016" y2="33.5082" stroke="white"/>
+                    <line x1="51.5" y1="35" x2="51.5" y2="49" stroke="white"/>
+                    <path d="M36.4999 47.0002C36.4036 48.5524 37.5 49 38.4999 49.0002" stroke="white"/>
+                    <line x1="32.5" y1="43" x2="32.5" y2="48.1279" stroke="white"/>
+                    <line x1="49.6546" y1="33.3689" x2="51.6546" y2="35.3689" stroke="white"/>
+                    <line x1="33" y1="42.5" x2="23" y2="42.5" stroke="white"/>
+                    <line x1="23.5" y1="42" x2="23.5" y2="48" stroke="white"/>
+                    <line x1="20.2179" y1="51.5" x2="0.982482" y2="51.5" stroke="white"/>
+                    <line x1="1.5" y1="34.0006" x2="1.47766" y2="52.0006" stroke="white"/>
+                    <line x1="4" y1="31.5" x2="10" y2="31.5" stroke="white"/>
+                    <line x1="4.5" y1="35.6711" x2="4.5" y2="49" stroke="white"/>
+                    <line x1="4" y1="49.063" x2="18" y2="49.063" stroke="white"/>
+                    <line x1="19.4716" y1="42.9934" x2="19.5282" y2="47.302" stroke="white"/>
+                    <line x1="6.6828" y1="33.3266" x2="4.3786" y2="35.9977" stroke="white"/>
+                    <line x1="19.4717" y1="32.998" x2="19.5" y2="39.998" stroke="white"/>
+                    <line x1="6.30482" y1="33.4917" x2="19.7282" y2="33.5083" stroke="white"/>
+                    <line x1="20" y1="39.5" x2="14" y2="39.5" stroke="white"/>
+                    <line x1="14.5" y1="35" x2="14.5" y2="40" stroke="white"/>
+                    <line x1="9" y1="35.5" x2="15" y2="35.5" stroke="white"/>
+                    <line x1="9.5" y1="35" x2="9.5" y2="43" stroke="white"/>
+                    <line x1="9" y1="42.5" x2="20" y2="42.5" stroke="white"/>
+                    <line x1="4.35355" y1="31.3536" x2="1.35355" y2="34.3536" stroke="white"/>
+                </svg>  
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item right" href="/logout">Выход</a>
+        </nav>
+        <main class="">
+            <div class="main-container">Тут пока ничего нет...</div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,543 @@
+<html>
+    <head>
+        <title>Dashboard</title>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        
+        <style>
+            .map{
+                position: relative;
+                width: 704px;
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            } 
+            .map svg{
+                position: relative;
+            }
+            .map rect{
+                fill: #999999;
+                cursor: pointer;
+            }
+            .map-item{
+                position: absolute;
+                cursor: pointer;
+            }
+            .map-name{
+                font-size: 10px;
+                text-align: center;
+                line-height: 13px;
+                font-weight: 500;
+                font-family: 'Rubik', sans-serif;
+            }
+            .map-popup{
+                display: none;
+                border: 1px solid black;
+                padding: 10px;
+                width: 200px;
+                position: absolute;
+                font-size: 12px;
+                line-height: 14px;
+                z-index: 9999;
+                text-align: left;
+                background: azure;
+                filter: drop-shadow(0px 0px 4px black);
+                border-radius: 5px;
+                top: -45px;
+            }
+            .map rect:hover, #hover {
+                fill: #bebebe;
+            }
+            .map rect.active {
+                fill: #dadada !important;
+            }
+            .navpan{
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-start;
+                background: #1e1e1e;
+                font-family: 'Rubik';
+                font-weight: 400;
+                font-size: 17px;
+            }
+            .navpan-item{
+                display: inline-block;
+                background: #1e1e1e;
+                color: white;
+                padding: 5px;
+                text-decoration: none;
+                /* border-radius: 5px; */
+                /* font-size: 15px; */
+            }
+            .navpan a:hover{
+                color:white;
+            }
+            .navpan-item:hover{
+                
+                background: #313131;
+            }
+            .right{
+                margin-left: auto;
+            }
+            body{
+                background-color: #cdcdcd;
+                margin: 0;
+            }
+            .main-container{
+                position: relative;
+                width: 95%;
+                background: #e1e1e1;
+                margin-top: 20px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 10px;
+                box-shadow: 0px 0px 4px #313131;
+            }
+            
+        </style>
+        
+    </head>
+    <body>
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <svg width="56" height="53" viewBox="0 0 56 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.4898 47.0534C19.5861 48.6057 18.4897 49.0532 17.4898 49.0534" stroke="white"/>
+                    <path d="M23.4896 47.7625C23.4896 51.9143 19.7275 51.4991 19.7275 51.4991" stroke="white"/>
+                    <path d="M32.5132 48.0036C32.1802 51.5179 36.4712 51.5177 36.4712 51.5177" stroke="white"/>
+                    <path d="M1.49999 18C1.50002 20.5 3 20.5 3.99996 20.5" stroke="white"/>
+                    <path d="M4.50009 16.9999C4.5 18.5004 6.00007 18.4999 6.50015 18.5002" stroke="white"/>
+                    <line x1="32.5" y1="12" x2="32.5" y2="21" stroke="white"/>
+                    <line x1="32" y1="20.5" x2="42" y2="20.5" stroke="white"/>
+                    <line x1="41.5" y1="20" x2="41.5" y2="31" stroke="white"/>
+                    <line x1="42" y1="31.5" x2="32" y2="31.5" stroke="white"/>
+                    <line x1="32.5" y1="31" x2="32.5" y2="40" stroke="white"/>
+                    <line x1="33" y1="39.5" x2="23" y2="39.5" stroke="white"/>
+                    <line x1="32" y1="12.5" x2="23" y2="12.5" stroke="white"/>
+                    <line x1="23.5" y1="12" x2="23.5" y2="21" stroke="white"/>
+                    <line x1="23.5" y1="31" x2="23.5" y2="40" stroke="white"/>
+                    <line x1="24" y1="20.5" x2="14" y2="20.5" stroke="white"/>
+                    <line x1="14.5" y1="20" x2="14.5" y2="32" stroke="white"/>
+                    <line x1="14" y1="31.5" x2="24" y2="31.5" stroke="white"/>
+                    <line x1="23" y1="9.5" x2="33" y2="9.5" stroke="white"/>
+                    <line x1="36.5" y1="10" x2="36.5" y2="5" stroke="white"/>
+                    <path d="M38.2773 3.41602L36.2773 5.41602" stroke="white"/>
+                    <line x1="38" y1="3.5" x2="52" y2="3.5" stroke="white"/>
+                    <line x1="51.5" y1="3" x2="51.5" y2="17" stroke="white"/>
+                    <line x1="36" y1="9.5" x2="46" y2="9.5" stroke="white"/>
+                    <line x1="45.5" y1="9" x2="45.5" y2="17" stroke="white"/>
+                    <line x1="46" y1="16.5" x2="41" y2="16.5" stroke="white"/>
+                    <line x1="41.5" y1="17" x2="41.5" y2="12" stroke="white"/>
+                    <line x1="41" y1="12.5" x2="36" y2="12.5" stroke="white"/>
+                    <line x1="36.5" y1="13" x2="36.5" y2="19" stroke="white"/>
+                    <line x1="37" y1="18.5" x2="51" y2="18.5" stroke="white"/>
+                    <path d="M51.5 16.5C51.5405 18.1804 51.3291 18.5548 50.4999 18.5001" stroke="white"/>
+                    <path d="M54.4999 17.5002C54.5 20.0002 53.5 20.5 52.4999 20.5002" stroke="white"/>
+                    <line x1="45" y1="20.5" x2="53" y2="20.5" stroke="white"/>
+                    <line x1="54.5" x2="54.5" y2="18" stroke="white"/>
+                    <line x1="54" y1="0.5" x2="37" y2="0.5" stroke="white"/>
+                    <line x1="37.3123" y1="0.390434" x2="32.3123" y2="4.39043" stroke="white"/>
+                    <line x1="32.5" y1="4" x2="32.5" y2="10" stroke="white"/>
+                    <line x1="23.5" y1="4" x2="23.5" y2="10" stroke="white"/>
+                    <line x1="23.6877" y1="4.39043" x2="18.6877" y2="0.390435" stroke="white"/>
+                    <line x1="19" y1="0.5" x2="1" y2="0.5" stroke="white"/>
+                    <line x1="1.5" x2="1.5" y2="18" stroke="white"/>
+                    <line x1="18" y1="12.5" x2="14" y2="12.5" stroke="white"/>
+                    <line x1="14.5" y1="12" x2="14.5" y2="19" stroke="white"/>
+                    <line x1="15" y1="18.5" x2="20" y2="18.5" stroke="white"/>
+                    <line x1="19.5" y1="19" x2="19.5" y2="5" stroke="white"/>
+                    <line x1="19.6464" y1="5.35355" x2="17.6464" y2="3.35355" stroke="white"/>
+                    <line x1="18" y1="3.5" x2="4" y2="3.5" stroke="white"/>
+                    <line x1="4.5" y1="3" x2="4.5" y2="17" stroke="white"/>
+                    <line x1="4" y1="20.5" x2="9" y2="20.5" stroke="white"/>
+                    <line x1="17.5" y1="9" x2="17.5" y2="13" stroke="white"/>
+                    <line x1="18" y1="9.5" x2="10" y2="9.5" stroke="white"/>
+                    <line x1="9.5" y1="9" x2="9.5" y2="31" stroke="white"/>
+                    <line x1="9" y1="18.5" x2="6" y2="18.5" stroke="white"/>
+                    <line x1="45.5" y1="20" x2="45.5" y2="43" stroke="white"/>
+                    <line x1="46" y1="42.5" x2="38" y2="42.5" stroke="white"/>
+                    <line x1="42" y1="33.5" x2="36" y2="33.5" stroke="white"/>
+                    <line x1="41.5" y1="33" x2="41.5" y2="40" stroke="white"/>
+                    <line x1="42" y1="39.5" x2="38" y2="39.5" stroke="white"/>
+                    <line x1="36.5" y1="34" x2="36.5" y2="47" stroke="white"/>
+                    <line x1="38.5" y1="39" x2="38.5" y2="43" stroke="white"/>
+                    <path d="M38 49H52" stroke="white"/>
+                    <line x1="54.5" y1="35" x2="54.5" y2="52" stroke="white"/>
+                    <line x1="55" y1="51.5" x2="36" y2="51.5" stroke="white"/>
+                    <line x1="54.6" y1="35.3" x2="51.6" y2="31.3" stroke="white"/>
+                    <line x1="52" y1="31.5" x2="45" y2="31.5" stroke="white"/>
+                    <line x1="45.0017" y1="33.4917" x2="50.0016" y2="33.5082" stroke="white"/>
+                    <line x1="51.5" y1="35" x2="51.5" y2="49" stroke="white"/>
+                    <path d="M36.4999 47.0002C36.4036 48.5524 37.5 49 38.4999 49.0002" stroke="white"/>
+                    <line x1="32.5" y1="43" x2="32.5" y2="48.1279" stroke="white"/>
+                    <line x1="49.6546" y1="33.3689" x2="51.6546" y2="35.3689" stroke="white"/>
+                    <line x1="33" y1="42.5" x2="23" y2="42.5" stroke="white"/>
+                    <line x1="23.5" y1="42" x2="23.5" y2="48" stroke="white"/>
+                    <line x1="20.2179" y1="51.5" x2="0.982482" y2="51.5" stroke="white"/>
+                    <line x1="1.5" y1="34.0006" x2="1.47766" y2="52.0006" stroke="white"/>
+                    <line x1="4" y1="31.5" x2="10" y2="31.5" stroke="white"/>
+                    <line x1="4.5" y1="35.6711" x2="4.5" y2="49" stroke="white"/>
+                    <line x1="4" y1="49.063" x2="18" y2="49.063" stroke="white"/>
+                    <line x1="19.4716" y1="42.9934" x2="19.5282" y2="47.302" stroke="white"/>
+                    <line x1="6.6828" y1="33.3266" x2="4.3786" y2="35.9977" stroke="white"/>
+                    <line x1="19.4717" y1="32.998" x2="19.5" y2="39.998" stroke="white"/>
+                    <line x1="6.30482" y1="33.4917" x2="19.7282" y2="33.5083" stroke="white"/>
+                    <line x1="20" y1="39.5" x2="14" y2="39.5" stroke="white"/>
+                    <line x1="14.5" y1="35" x2="14.5" y2="40" stroke="white"/>
+                    <line x1="9" y1="35.5" x2="15" y2="35.5" stroke="white"/>
+                    <line x1="9.5" y1="35" x2="9.5" y2="43" stroke="white"/>
+                    <line x1="9" y1="42.5" x2="20" y2="42.5" stroke="white"/>
+                    <line x1="4.35355" y1="31.3536" x2="1.35355" y2="34.3536" stroke="white"/>
+                </svg>  
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item right" href="/logout">Выход</a>
+        </nav>
+        <main class="">
+            <div class="main-container">
+                <div class="map">
+                    <svg width="704" height="302" viewBox="0 0 704 302" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line y1="126.5" x2="210" y2="126.5" stroke="black"/>
+                        <line x1="211.5" y1="97" x2="211.5" y2="131" stroke="black"/>
+                        <line x1="212" y1="130.5" x2="209" y2="130.5" stroke="black"/>
+                        <line x1="209.5" y1="131" x2="209.5" y2="128" stroke="black"/>
+                        <line x1="210" y1="128.5" x2="2" y2="128.5" stroke="black"/>
+                        <line x1="0.5" y1="126" x2="0.5" y2="288" stroke="black"/>
+                        <line x1="1" y1="287.5" x2="210" y2="287.5" stroke="black"/>
+                        <line x1="2.5" y1="128" x2="2.5" y2="286" stroke="black"/>
+                        <line x1="2" y1="285.5" x2="210" y2="285.5" stroke="black"/>
+                        <line x1="211.5" y1="301" x2="211.5" y2="283" stroke="black"/>
+                        <line x1="211" y1="283.5" x2="209" y2="283.5" stroke="black"/>
+                        <line x1="209.5" y1="283" x2="209.5" y2="285" stroke="black"/>
+                        <line x1="209" y1="242.5" x2="212" y2="242.5" stroke="black"/>
+                        <line x1="211.5" y1="242" x2="211.5" y2="273" stroke="black"/>
+                        <line x1="209.5" y1="243" x2="209.5" y2="273" stroke="black"/>
+                        <line x1="209" y1="272.5" x2="212" y2="272.5" stroke="black"/>
+                        <line x1="209" y1="224.5" x2="212" y2="224.5" stroke="black"/>
+                        <line x1="211.5" y1="225" x2="211.5" y2="148" stroke="black"/>
+                        <line x1="212" y1="148.5" x2="209" y2="148.5" stroke="black"/>
+                        <line x1="209.5" y1="148" x2="209.5" y2="225" stroke="black"/>
+                        <rect data-id="JW6" x="2.5" y="152.5" width="32" height="63" stroke="black"/>
+                        <rect data-id="JW5" x="34.5" y="152.5" width="34" height="63" stroke="black"/>
+                        <rect data-id="JW4" x="68.5" y="152.5" width="35" height="63" stroke="black"/>
+                        <rect data-id="JW3" x="103.5" y="152.5" width="36" height="63" stroke="black"/>
+                        <rect data-id="JW2" x="139.5" y="152.5" width="36" height="63" stroke="black"/>
+                        <rect data-id="JW1" x="175.5" y="152.5" width="34" height="63" stroke="black"/>
+                        <line x1="459.494" y1="-1.5685e-05" x2="459.5" y2="182" stroke="black"/>
+                        <line x1="459" y1="0.5" x2="513" y2="0.5" stroke="black"/>
+                        <line x1="512.5" x2="512.5" y2="3" stroke="black"/>
+                        <line x1="513" y1="2.5" x2="461" y2="2.5" stroke="black"/>
+                        <line x1="461.5" y1="2" x2="461.5" y2="178" stroke="black"/>
+                        <line x1="461" y1="177.5" x2="512" y2="177.5" stroke="black"/>
+                        <line x1="461" y1="179.5" x2="512" y2="179.5" stroke="black"/>
+                        <line x1="511.5" y1="177" x2="511.5" y2="180" stroke="black"/>
+                        <line x1="528" y1="177.5" x2="579" y2="177.5" stroke="black"/>
+                        <line x1="528.5" y1="177" x2="528.5" y2="180" stroke="black"/>
+                        <line x1="528" y1="179.5" x2="579" y2="179.5" stroke="black"/>
+                        <line x1="578.5" y1="179" x2="578.5" y2="193" stroke="black"/>
+                        <line x1="578" y1="192.5" x2="581" y2="192.5" stroke="black"/>
+                        <line x1="580.5" y1="193" x2="580.5" y2="2" stroke="black"/>
+                        <line x1="578.5" y1="178" x2="578.5" y2="2" stroke="black"/>
+                        <line x1="579" y1="2.5" x2="528" y2="2.5" stroke="black"/>
+                        <line x1="528.5" y1="3" x2="528.5" stroke="black"/>
+                        <line x1="528" y1="0.5" x2="630" y2="0.5" stroke="black"/>
+                        <line x1="629.5" x2="629.5" y2="3" stroke="black"/>
+                        <line x1="630" y1="2.5" x2="580" y2="2.5" stroke="black"/>
+                        <line x1="654.5" x2="654.5" y2="3" stroke="black"/>
+                        <line x1="654" y1="0.5" x2="704" y2="0.5" stroke="black"/>
+                        <line x1="704" y1="208.5" x2="516" y2="208.5" stroke="black"/>
+                        <line x1="516.5" y1="209" x2="516.5" y2="206" stroke="black"/>
+                        <line x1="516" y1="206.5" x2="579" y2="206.5" stroke="black"/>
+                        <line x1="578.5" y1="207" x2="578.5" y2="205" stroke="black"/>
+                        <line x1="578" y1="205.5" x2="581" y2="205.5" stroke="black"/>
+                        <line x1="580.5" y1="205" x2="580.5" y2="207" stroke="black"/>
+                        <line x1="580" y1="206.5" x2="702" y2="206.5" stroke="black"/>
+                        <line x1="702" y1="2.5" x2="654" y2="2.5" stroke="black"/>
+                        <line x1="459" y1="204.5" x2="462" y2="204.5" stroke="black"/>
+                        <line x1="461.5" y1="204" x2="461.5" y2="207" stroke="black"/>
+                        <line x1="461" y1="206.5" x2="500" y2="206.5" stroke="black"/>
+                        <line x1="499.5" y1="206" x2="499.5" y2="209" stroke="black"/>
+                        <line x1="500" y1="208.5" x2="461" y2="208.5" stroke="black"/>
+                        <line x1="459.5" y1="205" x2="459.5" y2="216" stroke="black"/>
+                        <line x1="209.5" y1="127" x2="209.5" y2="97" stroke="black"/>
+                        <line x1="209.5" y1="287" x2="209.5" y2="301" stroke="black"/>
+                        <line x1="245.5" y1="76" x2="245.5" y2="112" stroke="black"/>
+                        <line x1="245" y1="111.5" x2="248" y2="111.5" stroke="black"/>
+                        <line x1="247.5" y1="111" x2="247.5" y2="76" stroke="black"/>
+                        <line x1="245" y1="139.5" x2="248" y2="139.5" stroke="black"/>
+                        <line x1="245.5" y1="139" x2="245.5" y2="176" stroke="black"/>
+                        <line x1="245" y1="175.5" x2="248" y2="175.5" stroke="black"/>
+                        <line x1="247.5" y1="176" x2="247.5" y2="154" stroke="black"/>
+                        <line x1="247.5" y1="139" x2="247.5" y2="153" stroke="black"/>
+                        <line x1="247" y1="152.5" x2="362" y2="152.5" stroke="black"/>
+                        <line x1="361.5" y1="152" x2="361.5" y2="155" stroke="black"/>
+                        <line x1="362" y1="154.5" x2="247" y2="154.5" stroke="black"/>
+                        <line x1="459" y1="152.5" x2="390" y2="152.5" stroke="black"/>
+                        <line x1="390.5" y1="152" x2="390.5" y2="155" stroke="black"/>
+                        <line x1="390" y1="154.5" x2="459" y2="154.5" stroke="black"/>
+                        <line x1="461.5" y1="180" x2="461.5" y2="182" stroke="black"/>
+                        <line x1="462" y1="181.5" x2="459" y2="181.5" stroke="black"/>
+                        <line x1="245" y1="195.5" x2="248" y2="195.5" stroke="black"/>
+                        <line x1="245.5" y1="195" x2="245.5" y2="255" stroke="black"/>
+                        <line x1="245" y1="254.5" x2="248" y2="254.5" stroke="black"/>
+                        <line x1="247.5" y1="255" x2="247.5" y2="217" stroke="black"/>
+                        <line x1="247.5" y1="195" x2="247.5" y2="216" stroke="black"/>
+                        <line x1="247" y1="215.5" x2="421" y2="215.5" stroke="black"/>
+                        <line x1="420.5" y1="215" x2="420.5" y2="218" stroke="black"/>
+                        <line x1="421" y1="217.5" x2="390" y2="217.5" stroke="black"/>
+                        <line x1="390.5" y1="217" x2="390.5" y2="255" stroke="black"/>
+                        <line x1="391" y1="254.5" x2="388" y2="254.5" stroke="black"/>
+                        <line x1="388.5" y1="255" x2="388.5" y2="217" stroke="black"/>
+                        <line x1="389" y1="217.5" x2="247" y2="217.5" stroke="black"/>
+                        <line x1="439.5" y1="215" x2="439.5" y2="218" stroke="black"/>
+                        <line x1="461.5" y1="208" x2="461.5" y2="241" stroke="black"/>
+                        <line x1="459.5" y1="217" x2="459.5" y2="241" stroke="black"/>
+                        <line x1="460" y1="217.5" x2="439" y2="217.5" stroke="black"/>
+                        <line x1="439" y1="215.5" x2="460" y2="215.5" stroke="black"/>
+                        <line x1="245" y1="275.5" x2="248" y2="275.5" stroke="black"/>
+                        <line x1="245.5" y1="275" x2="245.5" y2="302" stroke="black"/>
+                        <line x1="247.5" y1="275" x2="247.5" y2="302" stroke="black"/>
+                        <rect data-id="HT4" x="461.5" y="2.5" width="45" height="43" stroke="black"/>
+                        <rect data-id="HT5" x="533.5" y="2.5" width="45" height="43" stroke="black"/>
+                        <rect data-id="HT6" x="533.5" y="45.5" width="45" height="45" stroke="black"/>
+                        <rect data-id="HT7" x="533.5" y="90.5" width="45" height="45" stroke="black"/>
+                        <rect data-id="HT8" x="533.5" y="135.5" width="45" height="42" stroke="black"/>
+                        <rect data-id="CM7" x="580.5" y="2.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM6" x="580.5" y="29.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM5" x="580.5" y="56.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM4" x="580.5" y="83.5" width="40" height="26" stroke="black"/>
+                        <rect data-id="CM3" x="580.5" y="109.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM2" x="580.5" y="136.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM1" x="580.5" y="163.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM14" x="661.5" y="163.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM13" x="661.5" y="136.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM12" x="661.5" y="109.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM11" x="661.5" y="83.5" width="40" height="26" stroke="black"/>
+                        <rect data-id="CM10" x="661.5" y="56.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM9" x="661.5" y="29.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="CM8" x="661.5" y="2.5" width="40" height="27" stroke="black"/>
+                        <rect data-id="HT3" x="461.5" y="45.5" width="45" height="45" stroke="black"/>
+                        <rect data-id="HT2" x="461.5" y="90.5" width="45" height="45" stroke="black"/>
+                        <rect data-id="HT1" x="461.5" y="135.5" width="45" height="42" stroke="black"/>
+                        <line x1="701.5" y1="207" x2="701.5" y2="2" stroke="black"/>
+                        <line x1="703.5" x2="703.5" y2="209" stroke="black"/>
+                    </svg>
+                    
+                    <div class="map-item" data-id = "JW1" style="top: 175px; left: 182px">
+                        <div class="map-name">JW1</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "JW2" style="top: 175px; left: 148px">
+                        <div class="map-name">JW2</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "JW3" style="top: 175px; left: 111px">
+                        <div class="map-name">JW3</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "JW4" style="top: 175px; left: 76px">
+                        <div class="map-name">JW4</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "JW5" style="top: 175px; left: 42px">
+                        <div class="map-name">JW5</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "JW6" style="top: 175px; left: 9px">
+                        <div class="map-name">JW6</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT1" style="top: 158px; left: 473px">
+                        <div class="map-name">HT1</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT2" style="top: 113px; left: 473px">
+                        <div class="map-name">HT2</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT3" style="top: 68px; left: 473px">
+                        <div class="map-name">HT3</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT4" style="top: 24px; left: 473px">
+                        <div class="map-name">HT4</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT5" style="top: 24px; left: 546px">
+                        <div class="map-name">HT5</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT6" style="top: 68px; left: 546px">
+                        <div class="map-name">HT6</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT7" style="top: 113px; left: 546px">
+                        <div class="map-name">HT7</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "HT8" style="top: 158px; left: 546px">
+                        <div class="map-name">HT8</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM1" style="top: 185px; left: 590px">
+                        <div class="map-name">CM1</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM2" style="top: 158px; left: 590px">
+                        <div class="map-name">CM2</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM3" style="top: 131px; left: 590px">
+                        <div class="map-name">CM3</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM4" style="top: 104px; left: 590px">
+                        <div class="map-name">CM4</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM5" style="top: 77px; left: 590px">
+                        <div class="map-name">CM5</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM6" style="top: 50px; left: 590px">
+                        <div class="map-name">CM6</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM7" style="top: 24px; left: 590px">
+                        <div class="map-name">CM7</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM8" style="top: 24px; left: 671px">
+                        <div class="map-name">CM8</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM9" style="top: 50px; left: 671px">
+                        <div class="map-name">CM9</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM10" style="top: 77px; left: 671px">
+                        <div class="map-name">CM10</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM11" style="top: 104px; left: 671px">
+                        <div class="map-name">CM11</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM12" style="top: 131px; left: 671px">
+                        <div class="map-name">CM12</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM13" style="top: 158px; left: 671px">
+                        <div class="map-name">CM13</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+
+                    <div class="map-item" data-id = "CM14" style="top: 185px; left: 671px">
+                        <div class="map-name">CM14</div>
+                        <div class="map-popup">
+                            Offline
+                        </div>
+                    </div>
+                </div>
+                <canvas id="myChart" style="display: none;">
+                </canvas>
+            </div>
+        </main>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+        <script 
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+            
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.0/chart.umd.js"></script>
+        <script  src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script  src="static/js/map.js"></script>     
+    </body>
+</html>
+
