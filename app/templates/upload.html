@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Sign In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
+
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            
+        </nav>
+        <main class="" style="  width: 100%;
+                                height: 100%;
+                                ">
+            <form method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <p>{{ form.file }}</p>
+                <p>{{ form.submit() }}</p>
+            </form>
+
+        </main>
+    </body>
+</html>

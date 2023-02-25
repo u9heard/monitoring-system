@@ -1,10 +1,14 @@
+.map rect.green {
+    fill: #1f6618 !important; 
+}
 .map{
     position: relative;
-    width: 704px;
+    width: auto;
     margin-left: auto;
     margin-right: auto;
     padding-top: 20px;
     padding-bottom: 20px;
+    overflow: auto;
 } 
 .map svg{
     position: relative;
@@ -23,12 +27,13 @@
     line-height: 13px;
     font-weight: 500;
     font-family: 'Rubik', sans-serif;
+    color: black;
 }
 .map-popup{
     display: none;
     border: 1px solid black;
     padding: 10px;
-    width: 200px;
+    width: 50px;
     position: absolute;
     font-size: 12px;
     line-height: 14px;
@@ -38,9 +43,10 @@
     filter: drop-shadow(0px 0px 4px black);
     border-radius: 5px;
     top: -45px;
+    color: #060606;
 }
 .map rect:hover, #hover {
-    fill: #bebebe;
+    fill: #bebebe !important;
 }
 .map rect.active {
     fill: #dadada !important;
@@ -76,18 +82,19 @@
     margin-left: auto;
 }
 body{
-    background-color: #cdcdcd;
+    background-color: #060606;
     margin: 0;
 }
 .main-container{
     position: relative;
     width: 95%;
-    background: #e1e1e1;
+    background: #080808;
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
     box-shadow: 0px 0px 4px #313131;
+    color: white;
 }
 .main-login{
     background: #e1e1e1;
@@ -114,8 +121,42 @@ body{
 input{
     font-family: 'Rubik', sans-serif;
     height: 30px;
-    font-size: 16px;
+    
 }
 .submit-fields{
     height: 13px;
+}
+ul{
+    list-style-type: none;
+}
+.main-table{
+    color: white;
+}
+
+td{
+    padding-right: 30px;
+}
+button{
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+}
+.custom-button{
+    background: #2d5e2d;
+    border-color: white;
+    color: white;
+    border: none;
+    border-width: 1px;
+    font-weight: 500;
+    height: 30px;
+    width: 100px;
+    border-radius: 30px;
+}
+select{
+    height: 30px;
+}
+.map-holder{
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    width: fit-content;
 }

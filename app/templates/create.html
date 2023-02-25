@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>Create Log</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+        
+    </head>
+    <body>
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item right" href="/logout">Выход</a>
+        </nav>
+        <main class="">
+            <div class="main-container" style="padding: 10;">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="d-line">
+                       
+                        {{ form.box_field() }}
+                        {% for error in form.date_start.errors %}
+                        <span style="color: red;">({{ error }})</span>
+                        {% endfor %}
+                        
+                   
+                       
+                        {{ form.date_start() }}
+                        {% for error in form.date_start.errors %}
+                        <span style="color: red;">({{ error }})</span>
+                        {% endfor %}
+                        
+                    
+                        
+                        {{ form.date_end() }}
+                        {% for error in form.date_end.errors %}
+                        <span style="color: red;">({{ error }})</span>
+                        {% endfor %}
+                    
+                        <p></p>
+                    
+                    <div  class="d-line"> 
+                        {{ form.submit(class_="custom-button") }}
+                        <input id="preview" class="custom-button" type="button" value="Просмотр"/>     
+                        
+                    </div>
+                   
+                </form>
+
+                <div id="screen" class="custom-button" style="
+                        margin-top: 10px; width: 30px;"><img style="width: 15px; height: 15px; filter: invert(1); position: relative; top: 7px;
+                        left: 7px;" src="/static/images/graph.png" alt="Кнопка «Graph»"></div>
+            </div>
+            <canvas id="myChart" style="display: none; background-color: white;">
+            </canvas>
+        </main>
+        <script 
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.0/chart.umd.js"></script>
+        <script  src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script  src="/static/js/table.js"></script>   
+    </body>
+</html>

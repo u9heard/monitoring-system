@@ -40,6 +40,17 @@ class Indication(db.Model):
 	hum = db.Column(db.Float)
 	time = db.Column(db.DateTime)
 	
+	def to_dict(self):
+		data = {
+			'id' : self.id,
+			'id_box' : self.id_box,
+			'temp' : self.temp,
+			'hum' : self.hum,
+			'time' : self.time
+		}
+
+		return data
+
 	def __repr__(self): #Сообщает ка кпечатать этот объект
 		return '<Temp: {0}; Hum: {1}, DT: {2}>'.format(self.temp, self.hum, self.time.strftime("%m/%d/%Y, %H:%M:%S"))
 		
@@ -57,4 +68,11 @@ class Device(db.Model):
 		return '<Device: {0}>'.format(self.name)
 	
 	
-	
+class Log(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	name = db.Column(db.String(64))
+	date = db.Column(db.String(64))
+	path = db.Column(db.String(64))
+
+	def __repr__(self):
+		return '<Log: {0} {1} {2} {3}>'.format(self.name, self.id, self.date, self.path)

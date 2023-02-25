@@ -36,8 +36,9 @@ var config = {
 		time: {
 		  unit: "minute",
 		  displayFormats: {
-			minute: 'dd/MM/yyyy hh:mm:ss'
-		  }
+			minute: 'dd.MM.yyyy hh:mm:ss'
+		  },
+		  tooltipFormat: "dd.MM.yyyy kk:mm:ss"
 		},
 		offset: true,
 		position: 'center',
@@ -47,7 +48,12 @@ var config = {
 		},
 		ticks: {
 			display: false,
+			includeBounds: false,
+			maxRotation: 0,
+			minRotation: 0,
+			
 		},
+		
 	  },
 	  x2: {
 		
@@ -55,8 +61,10 @@ var config = {
 		time: {
 		  unit: "minute",
 		  displayFormats: {
-			minute: 'dd/MM/yyyy hh:mm:ss'
-		  }
+			hour: "hh",
+			minute: 'dd.MM.yyyy kk:mm:ss'
+		  },
+		  tooltipFormat: "dd.MM.yyyy kk:mm:ss"
 		},
 		offset: true,
 		position: 'bottom',
@@ -73,6 +81,11 @@ var config = {
 		},
 		ticks: {
 			padding: 8,
+			
+			includeBounds: false,
+			maxRotation: 0,
+			minRotation: 0,
+			
 		}
 		
 	  },
@@ -91,10 +104,27 @@ var config = {
 			tickColor: '#000000',
 		},
 		
+		min: 50,
+		max: 90,
+		
+		ticks: {
+			includeBounds: false,
+			maxRotation: 0,
+			minRotation: 0,
+		},
+		title:{
+			display: true,
+			text: "Влажность, %",
+			color: "black",
+			font:{
+				size: 14,
+				weight: "bold"
+			}
+		}
 	  },
 	  y2: {
 		type: 'linear',
-		offset: false,
+		offset: true,
 		position: 'left',
 		stack: 'demo',
 		stackWeight: 1,
@@ -108,19 +138,49 @@ var config = {
 			tickColor: '#000000',
 			
 		},
+		min: 50,
+		max: 110,
+		
+		ticks: {
+			includeBounds: false,
+			maxRotation: 0,
+			minRotation: 0,
+		},
+		title:{
+			display: true,
+			text: "Температура, °F",
+			color: "black",
+			font:{
+				size: 14,
+				weight: "bold"
+			}
+		}
 	  }
+	},
+	plugins:{
+		title:{
+			display: true,
+			color: 'black',
+			text: ["Температура, °F,","Влажность, %"],
+			font: {size: 16},
+		},
+		legend:{
+			display: false,
+		}
 	}
   }
 };
 
+async function fetchData(url){
+	const response = await fetch(url);
+	const datapoints = await response.json();
+	// console.log(datapoints);
+	return datapoints;
+};
+
 function updateChart(id){
 	const url = 'api/get/' + id;
-	async function fetchData(url){
-		const response = await fetch(url);
-		const datapoints = await response.json();
-		console.log(datapoints);
-		return datapoints;
-	};
+	
 
 	fetchData(url).then(datapoints => {
 		dateTemp = datapoints.data.map(function(e){
@@ -142,6 +202,22 @@ function updateChart(id){
 function clearChartData(){
 	chart.data.datasets[0].data = [];
 }
+
+$(document).ready(function() {
+	var boxData;
+	fetchData("api/get/last").then(datapoints => {
+
+		
+
+		datapoints.forEach(function(e) { 
+			
+			$('.map rect[data-id=' + e.name + ']').addClass('green');
+			$('.map-item[data-id=' + e.name + ']').find('.map-popup').text("Online");
+			$('.map-item[data-id=' + e.name + ']').find('.map-popup').css({'color': 'green'});
+		});
+	});
+
+})
 
 $('.map rect').hover( 
 	function(){
@@ -169,8 +245,10 @@ $('.map-item').hover(
 
 $('.map-item').on('click',
 	function(){
-		$('.map rect').attr('class', '');
-		$('.map rect[data-id=' + $(this).data('id') + ']').attr('class', 'active');
+		$('.map rect').removeClass('active');
+		$('.map rect[data-id=' + $(this).data('id') + ']').addClass('active');
+		// $('.map rect').attr('class', '');
+		// $('.map rect[data-id=' + $(this).data('id') + ']').attr('class', 'active');
 		$('canvas').css('display', 'block');
 		clearChartData();
 		clearInterval(update);
