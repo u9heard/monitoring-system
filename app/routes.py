@@ -20,6 +20,7 @@ import os
 from werkzeug.utils import secure_filename
 import json
 from decimal import Decimal
+from app import login
 
 
 
@@ -126,7 +127,7 @@ def get_box(id):
 	# 	strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
 	return jsonify(data)
 
-@app.route('/api/get/last')
+@app.route('/api/get/last') #replaced
 @login_required
 def get_last_all():
 	inds = db.session.query(Indication.id_box, Box.name,

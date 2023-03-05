@@ -179,7 +179,7 @@ async function fetchData(url){
 };
 
 function updateChart(id){
-	const url = 'api/get/' + id;
+	const url = '/indications/' + id;
 	
 
 	fetchData(url).then(datapoints => {
@@ -205,7 +205,7 @@ function clearChartData(){
 
 $(document).ready(function() {
 	var boxData;
-	fetchData("api/get/last").then(datapoints => {
+	fetchData("indications/last").then(datapoints => {
 
 		
 

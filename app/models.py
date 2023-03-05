@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
 
 	@staticmethod
 	def check_token(token):
-		user = User.query.filter_by(token=token)
+		user = User.query.filter_by(token=token).first()
 		if user is None or user.token_expiration < datetime.now():
 			return None
 		return user

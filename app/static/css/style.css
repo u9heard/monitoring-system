@@ -113,6 +113,9 @@ body{
 h3{
     font-family: 'Rubik', sans-serif;
     margin-top: 5px;
+    margin-left: 10px;
+    border-bottom: orange solid 2px;
+    width: fit-content;
 
 }
 body{
