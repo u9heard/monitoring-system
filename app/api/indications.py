@@ -11,11 +11,11 @@ from sqlalchemy import func
 
 
 @bp.route('/indications/add', methods=['POST'])
-@token_auth.login_required
+# @token_auth.login_required
 def add_ind():
     data = request.get_json()
 	
-    box = Box.query.filter_by(id = data['id']).first()
+    box = Box.query.get(data['id'])
     if box is not None:
         ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
                     time = datetime.now())
@@ -24,7 +24,7 @@ def add_ind():
         
         return "OK"
     else:
-        return "404"
+        return "not ok"
     
 
 @app.route('/indications/last')
@@ -38,7 +38,7 @@ def get_online_api():
     return get_online()
 
 @app.route('/indications/<string:id>', methods=['GET'])
-@login_required
+#@login_required
 def get_inds_web(id):
     return get_inds(id)
 
@@ -52,24 +52,35 @@ def get_inds_api(id):
 
 def get_inds(id):
 
-    start_time = request.args.get('start')
-	
-    end_time = request.args.get('end')
-	
     bx = Box.query.where(Box.name==id).first()
+	#indications = Indication.query.where(Indication.id_box==bx.id)
+    start_time = request.args.get('start')
+    end_time = request.args.get('end')
 
-    if bx is None:
-        return bad_request('Invalid box name')
-	
+
     if start_time is not None and end_time is not None:
         indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.now())
     else:
         indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.now()-timedelta(hours=1), Indication.time < datetime.now())
 
-    data = Indication.to_collection_dict(indications)
-    
-    
 
+    data = {}
+    indata = []
+    i=0
+    for ind in indications:
+        
+
+        indata.append({
+            "id": ind.onBox.id,
+            "temp": ind.temp,
+            "hum": ind.hum,
+            "date": ind.time.strftime("%Y-%m-%dT%H:%M:%S")
+        })
+        
+
+    data["data"] = indata
+    # for ind in inds:
+    # 	strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
     return jsonify(data)
 
 

@@ -1,6 +1,7 @@
 var update;
 var ctx = document.getElementById('myChart');
 var chart;
+
 var dataTemp = [{x: '2021-06-01 15:00:00', y: 20}];
 var dataHum = [{x: '2021-06-01 15:00:00', y: 20}];
 var config = {
@@ -8,25 +9,24 @@ var config = {
   data: {
 	
 	datasets: [{
-			label: 'Температура',
-			data: dataTemp,
-			borderColor: '#FF0000',
-			backgroundColor: '#FF0000',
-			yAxisID: 'y2',
-			xAxisID: 'x2',
-			pointRadius: 0,
-			borderWidth: 1,
+		label: 'Температура',
+		data: dataTemp,
+		borderColor: '#FF0000',
+      	backgroundColor: '#FF0000',
+		yAxisID: 'y2',
+		xAxisID: 'x2',
+		pointRadius: 0,
+		borderWidth: 1,
 		},
 		{
 			label: 'Влажность',
 			data: dataHum,
 			borderColor: '#0000FF',
-			backgroundColor: '#0000FF',
+      		backgroundColor: '#0000FF',
 			yAxisID: 'y',
 			pointRadius: 0,
 			borderWidth: 1,
 		}
-		
 	]
   },
   options: {
@@ -103,7 +103,6 @@ var config = {
 			tickWidth: 1,
 			//offset: true,
 			tickColor: '#000000',
-			
 		},
 		
 		min: 20,
@@ -206,66 +205,11 @@ function clearChartData(){
 }
 
 $(document).ready(function() {
-	var boxData;
-	fetchData("indications/last").then(datapoints => {
-
-		
-
-		datapoints.forEach(function(e) { 
-			
-			$('.map rect[data-id=' + e.name + ']').addClass('green');
-			$('.map-item[data-id=' + e.name + ']').find('.map-popup').text("Online");
-			$('.map-item[data-id=' + e.name + ']').find('.map-popup').css({'color': 'green'});
-		});
-	});
+	clearInterval(update);
+    update = setInterval(() => updateChart($(this).data('id')), 1500);
+	
 
 })
-
-$('.map rect').hover( 
-	function(){
-		
-		$('.map-item[data-id=' + $(this).data('id') + ']').find('.map-popup').show();
-		
-	},
-	function(){
-		$('.map-item[data-id=' + $(this).data('id') + ']').find('.map-popup').hide();
-	}
-);
-
-$('.map-item').hover(
-	function(){
-		$('.map rect[data-id=' + $(this).data('id') + ']').attr('id', 'hover');
-		
-		$(this).find('.map-popup').show();
-	},
-	function(){
-		$('.map rect[data-id=' + $(this).data('id') + ']').attr('id', '');
-		
-		$(this).find('.map-popup').hide();
-	}
-);	
-
-$('.map-item').on('click',
-	function(){
-		$('.map rect').removeClass('active');
-		$('.map rect[data-id=' + $(this).data('id') + ']').addClass('active');
-		// $('.map rect').attr('class', '');
-		// $('.map rect[data-id=' + $(this).data('id') + ']').attr('class', 'active');
-		$('canvas').css('display', 'block');
-		clearChartData();
-		clearInterval(update);
-		update = setInterval(() => updateChart($(this).data('id')), 1500);
-	}
-);
-
-$('.map rect').on('click',
-	function(){
-		$('.map-item[data-id=' + $(this).data('id') + ']').trigger('click');
-	}
-);
-
-
-
 
 chart = new Chart(ctx, config);
 

@@ -62,7 +62,7 @@ def logout():
 def add_to_db():
 	data = request.get_json()
 	
-	box = Box.query.filter_by(id = data['id']).first()
+	box = Box.query.get(data['id'])
 	if box is not None:
 		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
 				  time = datetime.now())
@@ -93,7 +93,7 @@ def get_all():
 	# 	strin+=str(ind.temp) + " " + str(ind.hum) + " " + str(ind.onBox.name) + "\n" + "|"
 	return jsonify(data)
 
-@app.route('/api/get/<string:id>', methods=['GET'])
+@app.route('/get/<string:id>', methods=['GET'])
 @login_required
 def get_box(id):
 	bx = Box.query.where(Box.name==id).first()
@@ -273,3 +273,17 @@ def delete(filename):
 	return redirect(url_for('index'))
 
 
+@app.route('/webdash/<string:id>', methods=['GET', 'POST'])
+def webdash(id):
+	return render_template("graphview.html", jid=id)
+
+@app.route('/firebase-messaging-sw.js', methods=['GET', 'POST'])
+@login_required
+def firebase():
+	#return "Hello"
+	return send_from_directory('static/js/', 'firebase-messaging-sw.js')
+
+@app.route('/notify', methods=['GET', 'POST'])
+@login_required
+def notify():
+	return 0

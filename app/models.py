@@ -14,6 +14,8 @@ class User(UserMixin, db.Model):
 
 	token = db.Column(db.String(32),index=True, unique=True)
 	token_expiration = db.Column(db.DateTime)
+
+	fcmtoken = db.Column(db.String(256))
 	
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -21,6 +23,11 @@ class User(UserMixin, db.Model):
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 		
+	def set_fcm(self, token):
+		self.fcmtoken = token
+	
+	def get_fcm(self):
+		return self.fcmtoken
 	
 	#TOKENS
 	def get_token(self, expires_in=3600):

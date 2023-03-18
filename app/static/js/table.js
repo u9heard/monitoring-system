@@ -28,9 +28,11 @@ var config = {
 	  ]
 	},
 	options: {
+		spanGaps: 300000,
 	  responsive: true,
 	  scales: {
 		x: {
+			
 		  type: 'time',
 		  time: {
 			unit: "minute",
@@ -63,7 +65,7 @@ var config = {
 		  
 		},
 		x2: {
-		  
+			
 		  type: 'time',
 		  time: {
 			unit: "minute",
@@ -117,8 +119,8 @@ var config = {
 			  tickColor: '#000000',
 		  },
 		  
-		  min: 50,
-		  max: 90,
+		  min: 20,
+		  max: 80,
 		  
 		  ticks: {
 			  includeBounds: false,
@@ -151,8 +153,8 @@ var config = {
 			  tickColor: '#000000',
 			  
 		  },
-		  min: 50,
-		  max: 110,
+		  min: 15,
+		  max: 40,
 		  
 		  ticks: {
 			  includeBounds: false,
@@ -161,7 +163,7 @@ var config = {
 		  },
 		  title:{
 			  display: true,
-			  text: "Температура, °F",
+			  text: "Температура, °C",
 			  color: "black",
 			  font:{
 				  size: 14,
@@ -174,7 +176,7 @@ var config = {
 		  title:{
 			  display: true,
 			  color: 'black',
-			  text: ["Температура, °F,","Влажность, %"],
+			  text: ["Температура, °C,","Влажность, %"],
 			  font: {size: 16},
 		  },
 		  legend:{
@@ -196,13 +198,13 @@ function plotChart(name){
 }
 
 function updateChart(start, end, id){
-	const url = '/api/get/' + id + '?'+ 'start=' + start+':00' + '&' + 'end='+end+':00';
+	const url = '/get/' + id + '?'+ 'start=' + start+':00' + '&' + 'end='+end+':00';
 	
 
 	fetchData(url).then(datapoints => {
 		dateTemp = datapoints.data.map(function(e){
 			//alert(e["date"]);
-			return {x: e["date"], y: e["temp"], y2:e["hum"]}
+			return {x: e["date"], y: e["temp"]}
 		});
 
 		dateHum= datapoints.data.map(function(e){
