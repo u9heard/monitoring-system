@@ -72,7 +72,7 @@ class Box(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(64), index=True, unique=True)
 	Indications = db.relationship('Indication', backref='onBox', lazy='dynamic')
-	id_device = db.Column(db.Integer, db.ForeignKey('device.id'))
+	id_device = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True, unique=True)
 	
 	def __repr__(self): #Сообщает ка кпечатать этот объект
 		return '<Box {}>'.format(self.name)
@@ -109,15 +109,11 @@ class Indication(db.Model):
 		
 class Device(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(64))
-	name_temp = db.Column(db.String(64))
-	name_hum = db.Column(db.String(64))
-	correct_temp = db.Column(db.Float)
-	correct_hum = db.Column(db.Float)
-	Boxes = db.relationship('Box', backref='onDevice', lazy='dynamic')
+	address = db.Column(db.String(64))
+	Boxes = db.relationship('Box', backref='onDevice', uselist=False)
 	
 	def __repr__(self):
-		return '<Device: {0}>'.format(self.name)
+		return '<Device: {0}>'.format(self.address, self.Boxes)
 	
 	
 class Log(db.Model):
@@ -128,3 +124,4 @@ class Log(db.Model):
 
 	def __repr__(self):
 		return '<Log: {0} {1} {2} {3}>'.format(self.name, self.id, self.date, self.path)
+	

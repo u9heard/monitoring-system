@@ -185,14 +185,14 @@ function updateChart(id){
 	
 
 	fetchData(url).then(datapoints => {
-		dateTemp = datapoints.data.map(function(e){
+		dateTemp = datapoints.map(function(e){
 			//alert(e["temp"]);
-			return {x: e["date"], y: e["temp"], y2:e["hum"]}
+			return {x: e["time"], y: e["temp"], y2:e["hum"]}
 		});
 
-		dateHum= datapoints.data.map(function(e){
+		dateHum= datapoints.map(function(e){
 			//alert(e["date"]);
-			return {x: e["date"], y:e["hum"]}
+			return {x: e["time"], y:e["hum"]}
 		});
 
 		chart.data.datasets[0].data = dateTemp;

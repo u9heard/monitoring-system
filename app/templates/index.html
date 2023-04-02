@@ -15,6 +15,7 @@
             </a>
             <a class="navpan-item" href="/">Главная</a>
             <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item" href="/config">Конфигурация</a>
             <a class="navpan-item right" href="/logout">Выход</a>
         </nav>
         <main class="">
@@ -38,7 +39,7 @@
                             <td>{{ l.id }}</td>
                             <td>{{ l.name }}</td>
                             <td>{{ l.date }}</td>
-                            <td> <a href="{{ l.path }}" style="color:lawngreen">Загрузить</a> </td>
+                            <td> <a href="{{ l.path }}" style="color:#660066">Загрузить</a> </td>
                             <td> <a href="/delete/{{ l.path }}" style="color:red">Удалить</a> </td>
                         </tr>
                         {% endfor %}

@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>Sign In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
+
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item" href="/config">Конфигурация</a>
+            
+        </nav>
+        <main class="">
+            <div class="main-container" style="padding: 10px;">
+                <h3>Конфигурация системы</h3>
+                <form action="" method="post" novalidate>
+                    
+                    <div class="container">
+                        <table id="boxes" class="main-table">
+                            <tr>
+                                <td>ID</td>
+                                <td>Шкаф</td>
+                                <td>Адрес</td>
+                                <td>Заменить на</td>
+                                
+                            </tr>
+                            {% for dev in devices %}
+                            <tr>
+                                <td>{{ dev.id }}</td>
+                                <td>{{ dev.name }}</td>
+                                <td>{{ dev.address }}</td>
+                                <td>
+                                    <select id="address_field{{ dev.id }}" name="address_field">
+                                        {% for el in dev_list %}
+                                            <option value="{{ el }}">{{ el }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </table>
+                        <input id="save" class="custom-button" type="button" value="Сохранить"/>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+        <script 
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+        <script  src="static/js/config.js"></script> 
+    </body>
+</html>

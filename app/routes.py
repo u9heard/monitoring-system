@@ -3,9 +3,9 @@ from flask import render_template, flash, redirect, url_for, send_from_directory
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
-from app.forms import LoginForm, DataForm, FileForm
+from app.forms import LoginForm, DataForm, FileForm, ConfigForm
 from flask_login import current_user, login_user, logout_user
-from app.models import User
+from app.models import User, Device
 from flask_login import login_required
 from werkzeug.urls import url_parse
 from flask import request
@@ -22,13 +22,15 @@ import json
 from decimal import Decimal
 from app import login
 
+from app import notifications
+
 
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-	log = Log.query.order_by(Log.date)
+	log = Log.query.order_by(Log.id)
 
 	return render_template('index.html', title='Home', log=log)
 	
@@ -55,13 +57,24 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for('index'))
     
+    logout_user()
+    
+    return redirect(url_for('index'))
+
+
 @app.route('/api/add', methods=['POST'])
 def add_to_db():
 	data = request.get_json()
 	
+	device_from = Device.query.where(Device.address == data["dev"]).first()
+	
+	if(device_from is None):
+		new_device = Device(address=device_from.address)
+		empty_box = bx = Box.query.where(Box.onDevice==None).first()
+		#TODO: add new address if not exist
+
+
 	box = Box.query.get(data['id'])
 	if box is not None:
 		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
@@ -72,6 +85,22 @@ def add_to_db():
 		return "OK"
 	else:
 		return "404"
+
+
+# @app.route('/api/add', methods=['POST'])
+# def add_to_db():
+# 	data = request.get_json()
+	
+# 	box = Box.query.get(data['id'])
+# 	if box is not None:
+# 		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
+# 				  time = datetime.now())
+# 		db.session.add(ind)
+# 		db.session.commit()
+		
+# 		return "OK"
+# 	else:
+# 		return "404"
 		
 @app.route('/api/get', methods=['GET'])
 @login_required
@@ -166,15 +195,12 @@ def dashboards():
 	# 	})
 	return render_template('dash_def.html', objects = inds)
 
+
 @app.route('/dashboards')
 @login_required
 def dashboard():
 	return render_template('dashboard.html')
 
-@app.route('/last_data')
-def last_data():
-	return "Hehehe"
-	
 
 @app.route('/logs')
 @login_required
@@ -273,9 +299,9 @@ def delete(filename):
 	return redirect(url_for('index'))
 
 
-@app.route('/webdash/<string:id>', methods=['GET', 'POST'])
-def webdash(id):
-	return render_template("graphview.html", jid=id)
+# @app.route('/webdash/<string:id>', methods=['GET', 'POST'])
+# def webdash(id):
+# 	return render_template("graphview.html", jid=id)
 
 @app.route('/firebase-messaging-sw.js', methods=['GET', 'POST'])
 @login_required
@@ -283,7 +309,29 @@ def firebase():
 	#return "Hello"
 	return send_from_directory('static/js/', 'firebase-messaging-sw.js')
 
+
+@app.route('/config', methods=['GET', 'POST'])
+def configuration():
+	devices = db.session.query(Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True) 
+
+	dev_list = ['Не заменять', 'None']
+	[dev_list.append(d.address) for d in Device.query.all()]
+	
+
+	
+	
+
+
+
+
+	return render_template('config.html', devices=devices, dev_list=dev_list)
+
+
 @app.route('/notify', methods=['GET', 'POST'])
 @login_required
 def notify():
-	return 0
+	
+	#notifications.send_notifications_to_all('test_title', 'test_text')
+	return notifications.send_notifications_to_all('test_title', 'test_text')
+
+

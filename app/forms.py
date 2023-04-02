@@ -21,5 +21,8 @@ class FileForm(FlaskForm):
     file = FileField()
     submit = SubmitField('Сохранить')
     
+class ConfigForm(FlaskForm):
+    address_field = SelectField("Шкаф:", coerce=str)
+    submit = SubmitField('Сохранить', render_kw={"class": "custom-button"})
 
     

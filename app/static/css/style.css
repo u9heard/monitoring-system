@@ -1,6 +1,9 @@
 .map rect.green {
-    fill: #1f6618 !important; 
+    fill: #62b759 !important; 
 }
+
+
+
 .map{
     position: relative;
     width: auto;
@@ -14,7 +17,7 @@
     position: relative;
 }
 .map rect{
-    fill: #999999;
+    fill: #dfd3d3;
     cursor: pointer;
 }
 .map-item{
@@ -57,19 +60,22 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
-    background: #1e1e1e;
+    background: #009966;
     font-family: 'Rubik';
     font-weight: 400;
     font-size: 17px;
 }
 .navpan-item{
     display: inline-block;
-    background: #1e1e1e;
+    background: #009966;
     color: white;
     padding: 5px;
     text-decoration: none;
     /* border-radius: 5px; */
     /* font-size: 15px; */
+}
+.navpan-item img{
+    filter: drop-shadow(2px 4px 6px black);
 }
 .navpan a:hover{
     color:white;
@@ -84,20 +90,21 @@
 body{
     background-color: #060606;
     margin: 0;
+    background: #33cc99;
 }
 .main-container{
     position: relative;
     width: 95%;
-    background: #080808;
+    background: #f0f0f0;
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
     box-shadow: 0px 0px 4px #313131;
-    color: white;
+    color: black;
 }
 .main-login{
-    background: #e1e1e1;
+    background: #f0f0f0;
     border-radius: 10px;
     box-shadow: 0px 0px 4px #313131;
     margin: auto;
@@ -133,7 +140,7 @@ ul{
     list-style-type: none;
 }
 .main-table{
-    color: white;
+    color: black;
 }
 
 td{
@@ -144,7 +151,7 @@ button{
     font-weight: 400;
 }
 .custom-button{
-    background: #2d5e2d;
+    background: #009966;
     border-color: white;
     color: white;
     border: none;

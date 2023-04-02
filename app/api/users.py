@@ -30,3 +30,16 @@ def add_fcm():
 def test():
     cur_user = current_user
     return """{0} {1} {2}""".format(cur_user.username, cur_user.token, cur_user.email)
+
+@bp.route('/fcmtoken', methods=['POST'])
+@token_auth.login_required
+def add_fcm_by_api():
+    cur_token = g.current_user.fcmtoken
+    data = request.get_json()
+
+    if(data['fcm'] is not None and data['fcm'] != cur_token):
+        g.current_user.set_fcm(data['fcm'])
+        db.session.commit()
+        return 'added'
+
+    return 'OK'

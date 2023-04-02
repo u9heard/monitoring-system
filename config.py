@@ -12,7 +12,10 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'lhgwofbzdwpfjt'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'app.db')
+    
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:pass01@localhost/foodrus"
+
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    #     'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = FOLDER
