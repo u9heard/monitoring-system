@@ -1,20 +1,30 @@
-$("#save").click(function() {
-    var rowCount = $("#boxes tr").length-1
-    console.log(rowCount)
-    var dataToSend = []
-    for(var i=1; i<=rowCount; i++ ){
-        //dataToSend.push(JSON.stringify({id: $("#boxes tr")[i].cells[0].textContent, 
-                                        //addr: $("#address_field" + i + " :selected").text()}))
-        // console.log($("#boxes tr")[i].cells[0].textContent)
-        // console.log($("#address_field" + i + " :selected").text())
-        dataToSend.push({id: $("#boxes tr")[i].cells[0].textContent, 
+$("#save").click(async function() {
+    var rowCountSys = $("#boxes tr").length-1
+    var rowCountDev = $("#corrections tr").length-1
+    console.log(rowCountSys)
+    var boxToSend = []
+    var deviceToSend = []
+    for(var i=1; i<=rowCountSys; i++ ){
+        boxToSend.push({id: $("#boxes tr")[i].cells[0].textContent, 
                         addr: $("#address_field" + i + " :selected").text()});
     }
-    console.log(JSON.stringify(dataToSend))
+    for(var i=1; i<=rowCountDev; i++){
+        var ids = $("#corrections tr")[i].cells[0].textContent
+        deviceToSend.push({id: ids, 
+                        correction_t: $("#cor_t_field" + ids).val(),
+                        correction_h: $("#cor_h_field" + ids).val()});
+    }
+    console.log(JSON.stringify({box: boxToSend, device:deviceToSend}))
 
-    sendPOST('/config/replace', JSON.stringify({data: dataToSend}))
+    const res = await sendPOST('/config/replace', JSON.stringify({box: boxToSend, device:deviceToSend}))
+    
+    location.reload(true);
 });
 
+
+$('body').on('input', '.input', function(){
+	this.value = this.value.replace(/[^0-9\.]/g, '');
+});
 
 async function sendPOST(url, data){
     const response = await fetch(url, {
@@ -25,34 +35,9 @@ async function sendPOST(url, data){
         body: data,
     });
 
-    console.log(response)
+    const respJson  = await response.json()
+    console.log(respJson)
 }
 
-async function fetchData(url){
-	const response = await fetch(url);
-	const datapoints = await response.json();
-	console.log(datapoints);
-	return datapoints;
-};
 
-function updateChart(start, end, id){
-	const url = '/get/' + id + '?'+ 'start=' + start+':00' + '&' + 'end='+end+':00';
-	
-
-	fetchData(url).then(datapoints => {
-		dateTemp = datapoints.data.map(function(e){
-			//alert(e["date"]);
-			return {x: e["date"], y: e["temp"]}
-		});
-
-		dateHum= datapoints.data.map(function(e){
-			//alert(e["date"]);
-			return {x: e["date"], y:e["hum"]}
-		});
-
-		chart.data.datasets[0].data = dateTemp;
-		chart.data.datasets[1].data = dateHum;
-		chart.update();
-	});
-};
 

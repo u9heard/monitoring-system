@@ -227,7 +227,7 @@ def logs():
 def create_log():
 	form = DataForm()
 	
-	form.box_field.choices = [(b.id, b.name) for b in Box.query.all()]
+	form.box_field.choices = [(b.id, b.name) for b in Box.query.order_by(Box.id).all()]
 	if form.validate_on_submit():
 		bx = Box.query.filter_by(id=form.box_field.data).first()
 		
@@ -310,21 +310,15 @@ def firebase():
 	return send_from_directory('static/js/', 'firebase-messaging-sw.js')
 
 
-@app.route('/config', methods=['GET', 'POST'])
-def configuration():
-	devices = db.session.query(Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True) 
+# @app.route('/config', methods=['GET', 'POST'])
+# def configuration():
+# 	devices = db.session.query(Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True) 
 
-	dev_list = ['Не заменять', 'None']
-	[dev_list.append(d.address) for d in Device.query.all()]
+# 	dev_list = ['Не заменять', 'None']
+# 	[dev_list.append(d.address) for d in Device.query.all()]
 	
 
-	
-	
-
-
-
-
-	return render_template('config.html', devices=devices, dev_list=dev_list)
+# 	return render_template('config.html', devices=devices, dev_list=dev_list)
 
 
 @app.route('/notify', methods=['GET', 'POST'])

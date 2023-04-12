@@ -2,7 +2,9 @@
     fill: #62b759 !important; 
 }
 
-
+.pad_med{
+    padding-bottom: 50px;
+}
 
 .map{
     position: relative;
@@ -163,6 +165,8 @@ button{
 }
 select{
     height: 30px;
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
 }
 .map-holder{
     margin-left: auto;

@@ -72,7 +72,7 @@ class Box(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(64), index=True, unique=True)
 	Indications = db.relationship('Indication', backref='onBox', lazy='dynamic')
-	id_device = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True, unique=True)
+	id_device = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True)
 	
 	def __repr__(self): #Сообщает ка кпечатать этот объект
 		return '<Box {}>'.format(self.name)
@@ -111,7 +111,9 @@ class Device(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	address = db.Column(db.String(64))
 	Boxes = db.relationship('Box', backref='onDevice', uselist=False)
-	
+	correct_t = db.Column(db.Float, default=0)
+	correct_h = db.Column(db.Float, default=0)
+
 	def __repr__(self):
 		return '<Device: {0}>'.format(self.address, self.Boxes)
 	

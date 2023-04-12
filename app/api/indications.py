@@ -6,7 +6,7 @@ from app.api.errors import bad_request
 from flask import jsonify, request, g
 from datetime import datetime, timedelta
 from app import app, db
-from sqlalchemy import func
+from sqlalchemy import func, desc
 
 
 @bp.route('/indications/add', methods=['POST'])
@@ -94,10 +94,10 @@ def get_inds(id):
     end_time = request.args.get('end')
 
 
-    if start_time is not None and end_time is not None:
-        indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.now())
+    if start_time is not None or end_time is not None:
+        indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S"), Indication.time < datetime.now()).order_by(Indication.id)
     else:
-        indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.now()-timedelta(hours=1), Indication.time < datetime.now())
+        indications = Indication.query.where(Indication.id_box==bx.id).filter(Indication.time > datetime.now()-timedelta(hours=1), Indication.time < datetime.now()).order_by(Indication.id)
 
 
     
