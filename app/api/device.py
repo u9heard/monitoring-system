@@ -51,12 +51,12 @@ def get_devices():
         device_list.append({
             "id": a.id,
             "address": a.address,
-            "correction_t": a.correction_t,
-            "correction_h": a.correction_h
+            "correct_t": a.correct_t,
+            "correct_h": a.correct_h
         })
 
 
-    return jsonify(device_list)
+    return jsonify({"device_list":device_list})
 
 
 @app.route('/config', methods=['GET'])
