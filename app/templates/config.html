@@ -16,15 +16,16 @@
             <a class="navpan-item" href="/">Главная</a>
             <a class="navpan-item" href="/dashboard">Мониторинг</a>
             <a class="navpan-item" href="/config">Конфигурация</a>
+            <a class="navpan-item right" href="/logout">Выход</a>
             
         </nav>
         <main class="">
-            <div class="main-container" style="padding: 10px;">
+            <div class="main-container fit-cont" style="padding: 10px;">
                 <h3>Конфигурация системы</h3>
                 <!-- <form action="" method="post" novalidate> -->
                     
                     <div class="container pad_med">
-                        <table id="boxes" class="main-table">
+                        <table id="boxes" class="main-table full-width">
                             <tr>
                                 <td>ID</td>
                                 <td>Шкаф</td>
@@ -51,7 +52,7 @@
                         <!-- <input id="save" class="custom-button" type="button" value="Сохранить"/> -->
                     </div>
                     <h3>Коррекция параметров</h3>
-                    <div class="container">
+                    <div class="container pad_med">
                         <table id="corrections" class="main-table">
                             <tr>
                                 <td>ID</td>
@@ -75,8 +76,9 @@
                             </tr>
                             {% endfor %}
                         </table>
-                        <input id="save" class="custom-button" type="button" value="Сохранить"/>
+                        
                     </div>
+                    <input id="save" class="custom-button" type="button" value="Сохранить"/>
 
                 <!-- </form> -->
             </div>
@@ -86,5 +88,6 @@
             integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
             crossorigin="anonymous"></script>
         <script  src="static/js/config.js"></script> 
+        
     </body>
 </html>

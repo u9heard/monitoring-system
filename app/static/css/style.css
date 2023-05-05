@@ -17,6 +17,7 @@
 } 
 .map svg{
     position: relative;
+    filter: drop-shadow(1px 3px 6px grey);
 }
 .map rect{
     fill: #dfd3d3;
@@ -56,6 +57,11 @@
 .map rect.active {
     fill: #dadada !important;
 }
+
+.fit-cont{
+    width: fit-content !important;
+}
+
 .navpan{
     position: relative;
     display: flex;
@@ -66,6 +72,8 @@
     font-family: 'Rubik';
     font-weight: 400;
     font-size: 17px;
+    padding-left: 10;
+    padding-right: 10;
 }
 .navpan-item{
     display: inline-block;
@@ -133,7 +141,7 @@ body{
 input{
     font-family: 'Rubik', sans-serif;
     height: 30px;
-    
+    border-radius: 5px; border-width: thin;
 }
 .submit-fields{
     height: 13px;
@@ -143,6 +151,18 @@ ul{
 }
 .main-table{
     color: black;
+}
+
+.main-table tr:nth-child(odd) {
+    background-color: #cfccce;
+}
+  
+tbody tr:nth-child(even) {
+    background-color: #e3e3e3;
+}
+
+.full-width{
+    width: 100%;
 }
 
 td{
@@ -162,11 +182,13 @@ button{
     height: 30px;
     width: 100px;
     border-radius: 30px;
+    text-shadow: #664242 1px 0 10px;
 }
 select{
     height: 30px;
     font-family: "Rubik", sans-serif;
     font-size: 14px;
+    border-radius: 5px;
 }
 .map-holder{
     margin-left: auto;

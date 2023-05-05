@@ -1,3 +1,6 @@
+
+
+
 var ctx = document.getElementById('myChart');
 var chart;
 var dataTemp = [{x: '2021-06-01 15:00:00', y: 20}];
@@ -28,8 +31,9 @@ var config = {
 	  ]
 	},
 	options: {
-		spanGaps: 300000,
+	spanGaps: 300000,
 	  responsive: true,
+	  
 	  scales: {
 		x: {
 			
@@ -50,7 +54,7 @@ var config = {
 		  ticks: {
 			  display: false,
 			  includeBounds: false,
-			  maxRotation: 0,
+			  maxRotation: 45,
 			  minRotation: 0,
 			  
 		  },
@@ -95,7 +99,7 @@ var config = {
 			  padding: 8,
 			  
 			  includeBounds: false,
-			  maxRotation: 0,
+			  maxRotation: 45,
 			  minRotation: 0,
 			  
 		  },
@@ -181,10 +185,41 @@ var config = {
 		  },
 		  legend:{
 			  display: false,
-		  }
+		  },
+		  annotation: {
+			annotations: {
+				boxTemp: {
+					type: 'box',
+					mode: 'horizontal',
+					yScaleID: 'y2',
+					yMin: 37.5,
+					yMax: 38.5,
+					backgroundColor: 'rgba(0, 200, 0, 0.10)',
+					// label: {
+					//   content: 'My Horizontal Line',
+					//   enabled: true
+					// }
+				},
+				boxHum: {
+					type: 'box',
+					mode: 'horizontal',
+					yScaleID: 'y',
+					
+					yMin: 65,
+					yMax: 75,
+					backgroundColor: 'rgba(0, 200, 0, 0.10)',
+					// label: {
+					//   content: 'My Horizontal Line',
+					//   enabled: true
+					// }
+				  }
+				},
+				
+			},
+		  },
 	  }
-	}
-  };
+	};
+  
 
 async function fetchData(url){
 	const response = await fetch(url);
@@ -198,18 +233,18 @@ function plotChart(name){
 }
 
 function updateChart(start, end, id){
-	const url = '/get/' + id + '?'+ 'start=' + start+':00' + '&' + 'end='+end+':00';
+	const url = '/indications/' + id + '?'+ 'start=' + start+':00' + '&' + 'end='+end+':00';
 	
 
 	fetchData(url).then(datapoints => {
-		dateTemp = datapoints.data.map(function(e){
+		dateTemp = datapoints.map(function(e){
 			//alert(e["date"]);
-			return {x: e["date"], y: e["temp"]}
+			return {x: e["time"], y: e["temp"]}
 		});
 
-		dateHum= datapoints.data.map(function(e){
+		dateHum= datapoints.map(function(e){
 			//alert(e["date"]);
-			return {x: e["date"], y:e["hum"]}
+			return {x: e["time"], y:e["hum"]}
 		});
 
 		chart.data.datasets[0].data = dateTemp;
@@ -232,6 +267,7 @@ $("#preview").click(function() {
 });
 
 chart = new Chart(ctx, config);
+
 
 $('#screen').click(function() {
 	var a = document.createElement('a');

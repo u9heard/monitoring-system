@@ -58,33 +58,34 @@ def login():
 @login_required
 def logout():
     
+	
     logout_user()
     
     return redirect(url_for('index'))
 
 
-@app.route('/api/add', methods=['POST'])
-def add_to_db():
-	data = request.get_json()
+# @app.route('/api/add', methods=['POST'])
+# def add_to_db():
+# 	data = request.get_json()
 	
-	device_from = Device.query.where(Device.address == data["dev"]).first()
+# 	device_from = Device.query.where(Device.address == data["dev"]).first()
 	
-	if(device_from is None):
-		new_device = Device(address=device_from.address)
-		empty_box = bx = Box.query.where(Box.onDevice==None).first()
-		#TODO: add new address if not exist
+# 	if(device_from is None):
+# 		new_device = Device(address=device_from.address)
+# 		empty_box = bx = Box.query.where(Box.onDevice==None).first()
+# 		#TODO: add new address if not exist
 
 
-	box = Box.query.get(data['id'])
-	if box is not None:
-		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
-				  time = datetime.now())
-		db.session.add(ind)
-		db.session.commit()
+# 	box = Box.query.get(data['id'])
+# 	if box is not None:
+# 		ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
+# 				  time = datetime.now())
+# 		db.session.add(ind)
+# 		db.session.commit()
 		
-		return "OK"
-	else:
-		return "404"
+# 		return "OK"
+# 	else:
+# 		return "404"
 
 
 # @app.route('/api/add', methods=['POST'])
@@ -251,32 +252,32 @@ def create_log():
 		
 	return render_template('create.html', form=form)
 
-@app.route('/upload', methods=['GET', 'POST'])
-@login_required
-def upload():
-	form = FileForm()
+# @app.route('/upload', methods=['GET', 'POST'])
+# @login_required
+# def upload():
+# 	form = FileForm()
 
-	if form.validate_on_submit():
-		filename = secure_filename(form.file.data.filename)
-		form.file.data.save('uploads/'+filename)
+# 	if form.validate_on_submit():
+# 		filename = secure_filename(form.file.data.filename)
+# 		form.file.data.save('uploads/'+filename)
 
-		name = filename.partition('-')[0]
+# 		name = filename.partition('-')[0]
 
-		with open('uploads/'+filename) as f:
-			data = json.load(f)
-			bx = Box.query.filter_by(name=name).first()
+# 		with open('uploads/'+filename) as f:
+# 			data = json.load(f)
+# 			bx = Box.query.filter_by(name=name).first()
 			
-			for dt in data['list']:
+# 			for dt in data['list']:
 				
-				ind = Indication(onBox=bx, temp=round(dt['temperature']*1.8+32, 1),
-		     			hum=dt['humidity'], time=datetime.strptime(dt['time'], "%Y-%m-%dT%H:%M:%S"))
-				db.session.add(ind)
+# 				ind = Indication(onBox=bx, temp=round(dt['temperature']*1.8+32, 1),
+# 		     			hum=dt['humidity'], time=datetime.strptime(dt['time'], "%Y-%m-%dT%H:%M:%S"))
+# 				db.session.add(ind)
 			
-			db.session.commit()
+# 			db.session.commit()
 				
 
-		return redirect(url_for('index'))
-	return render_template('upload.html', form = form)
+# 		return redirect(url_for('index'))
+# 	return render_template('upload.html', form = form)
 
 @app.route('/logs/<path:filename>', methods=['GET', 'POST'])
 @login_required
@@ -306,7 +307,6 @@ def delete(filename):
 @app.route('/firebase-messaging-sw.js', methods=['GET', 'POST'])
 @login_required
 def firebase():
-	#return "Hello"
 	return send_from_directory('static/js/', 'firebase-messaging-sw.js')
 
 
