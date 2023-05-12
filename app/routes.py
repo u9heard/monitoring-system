@@ -326,6 +326,4 @@ def firebase():
 def notify():
 	
 	#notifications.send_notifications_to_all('test_title', 'test_text')
-	return notifications.send_notifications_to_all('test_title', 'test_text')
-
-
+	return notifications.send_to_all('test_title', 'test_text')

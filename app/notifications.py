@@ -4,7 +4,7 @@ from app.models import User
 from firebase_admin import messaging
 
 
-def send_notifications_to_all(title, messag):
+def send_to_all(title, messag):
     users = User.query.all()
     rtokens = []
     for u in users:
@@ -13,8 +13,8 @@ def send_notifications_to_all(title, messag):
     
     message = messaging.MulticastMessage(
         notification=messaging.Notification(
-            title="CM4",
-            body="Выход за пределы рабочей температуры!"
+            title=title,
+            body=messag
         ),
         
         tokens = rtokens

@@ -1,12 +1,13 @@
 from flask_login import login_required
 from app.api import bp
 from app.api.auth import token_auth
-from app.models import Indication, Box, Device
+from app.models import Indication, Box, Device, Alert
 from app.api.errors import bad_request
 from flask import jsonify, request, g
 from datetime import datetime, timedelta
 from app import app, db
 from sqlalchemy import func, desc
+from app import notifications
 
 
 @bp.route('/indications/add', methods=['POST'])
@@ -36,7 +37,7 @@ def add_to_db():
         db.session.add(new_device)
         db.session.commit()
 
-        empty_box = Box.query.where(Box.onDevice == None).first() #TODO: add new address if not exist
+        empty_box = Box.query.where(Box.onDevice == None).first() 
         empty_box.id_device = new_device.id 
         db.session.commit()
 
@@ -45,7 +46,26 @@ def add_to_db():
         db.session.commit()
     else:
         box = Box.query.where(Box.id_device == device_from.id).first()
-        new_ind = Indication(onBox=box, temp=data["temp"], hum=data["hum"], time=datetime.now())
+        current_date = datetime.now()
+        if box.alert_active == 1:
+            last_alert = Alert.query.where(Alert.id_box == box.id).order_by(desc(Alert.date)).first()
+            if last_alert is None:
+                checked_alert_temp = check_temp(box, data["temp"], current_date)
+                checked_alert_hum = check_hum(box, data["hum"], current_date)
+                if checked_alert_temp is not None:
+                    db.session.add(checked_alert_temp)
+                if checked_alert_hum is not None:
+                    db.session.add(checked_alert_hum)
+            elif last_alert.date < current_date-timedelta(minutes=5):
+                checked_alert_temp = check_temp(box, data["temp"], current_date)
+                checked_alert_hum = check_hum(box, data["hum"], current_date)
+                if checked_alert_temp is not None:
+                    db.session.add(checked_alert_temp)
+                if checked_alert_hum is not None:
+                    db.session.add(checked_alert_hum)
+                
+                
+        new_ind = Indication(onBox=box, temp=float(data["temp"])+device_from.correct_t, hum=float(data["hum"])+device_from.correct_h, time=current_date) #TODO: check this
         db.session.add(new_ind)
         db.session.commit()
 
@@ -145,3 +165,34 @@ def get_online():
             "time": i.time.strftime("%Y-%m-%dT%H:%M:%S")
         })
     return jsonify(data)
+
+
+def check_temp(box, temp, date):
+    if float(temp) > 38.5 or float(temp) < 37.5:
+        notifications.send_to_all(box.name, "Выход за пределы рабочей температуры!")
+        new_alert = Alert(onBox = box, title = box.name, body = "Выход за пределы рабочей температуры!", date = date)
+        return new_alert
+    
+    return None
+    
+
+
+def check_hum(box, hum, date):
+    if float(hum) > 75 or float(hum) < 65:
+        notifications.send_to_all(box.name, "Выход за пределы рабочей влажности!")
+        new_alert = Alert(onBox = box, title = box.name, body = "Выход за пределы рабочей влажности!", date = date)
+        return new_alert
+    
+    return True
+
+@bp.route("/sensor_fault", methods=['POST'])
+@token_auth.login_required
+def sensor_fault():
+    data = request.get_json()
+    device_fault = Device.query.where(Device.address==data["addr"]).first()
+
+    box_fault = Box.query.where(Box.id_device == device_fault.id)
+
+    new_alert = Alert(title='Ошибка моста или датчика', body=box_fault.name)
+
+    return "TODO"

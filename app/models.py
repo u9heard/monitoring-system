@@ -5,6 +5,7 @@ from app import login
 from datetime import datetime, timedelta
 import base64
 import os
+from sqlalchemy.sql import text
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -15,7 +16,7 @@ class User(UserMixin, db.Model):
 	token = db.Column(db.String(32),index=True, unique=True)
 	token_expiration = db.Column(db.DateTime)
 
-	fcmtoken = db.Column(db.String(256))
+	FCMtokens = db.relationship('FCMtokens', backref='onUser', lazy='dynamic')
 	
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -23,11 +24,11 @@ class User(UserMixin, db.Model):
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 		
-	def set_fcm(self, token):
-		self.fcmtoken = token
+	# def set_fcm(self, token):
+	# 	self.fcmtoken = token
 	
-	def get_fcm(self):
-		return self.fcmtoken
+	# def get_fcm(self):
+	# 	return self.fcmtoken
 	
 	#TOKENS
 	def get_token(self, expires_in=3600):
@@ -67,13 +68,20 @@ class User(UserMixin, db.Model):
 
 		}
 		return data
+	
+class FCMtokens(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+	fcm_token = db.Column(db.String(256))
 		
 class Box(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(64), index=True, unique=True)
 	Indications = db.relationship('Indication', backref='onBox', lazy='dynamic')
 	Logs = db.relationship('Log', backref='onBox', lazy='dynamic')
+	Alerts = db.relationship('Alert', backref='onBox', lazy='dynamic')
 	id_device = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True)
+	alert_active = db.Column(db.Integer, nullable = False, server_default=text("0"))
 	
 	def __repr__(self): #Сообщает ка кпечатать этот объект
 		return '<Box {}>'.format(self.name)
@@ -129,3 +137,10 @@ class Log(db.Model):
 	def __repr__(self):
 		return '<Log: {0} {1} {2} {3}>'.format(self.name, self.id, self.date, self.path)
 	
+
+class Alert(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(32))
+	body = db.Column(db.String(64))
+	date = db.Column(db.DateTime)
+	id_box = db.Column(db.Integer, db.ForeignKey('box.id'))

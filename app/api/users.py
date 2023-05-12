@@ -1,7 +1,7 @@
 from app.api import bp
 from app.api.auth import token_auth
 from flask import jsonify, request, g
-from app.models import User
+from app.models import User, FCMtokens
 from app import app, db
 from flask_login import login_required, current_user
 
@@ -15,13 +15,15 @@ def get_user(id):
 @app.route('/fcmtoken', methods=['POST'])
 @login_required
 def add_fcm():
-    cur_token = current_user.fcmtoken
+    cur_tokens = db.session.query(FCMtokens.fcm_token).where(FCMtokens.id_user == current_user.id).all()
 
     data = request.get_json()
-    if(data['fcm'] is not None and data['fcm'] != cur_token):
-        current_user.set_fcm(data['fcm'])
-        db.session.commit()
-        return 'added'
+    if(data['fcm'] is not None and (data['fcm'],) not in cur_tokens):
+            new_fcm = FCMtokens(id_user = current_user.id, fcm_token = data['fcm'])
+            #current_user.set_fcm(data['fcm'])
+            db.session.add(new_fcm)
+            db.session.commit()
+            return 'added'
 
     return 'ok'
 
@@ -34,12 +36,14 @@ def test():
 @bp.route('/fcmtoken', methods=['POST'])
 @token_auth.login_required
 def add_fcm_by_api():
-    cur_token = g.current_user.fcmtoken
+    cur_tokens = db.session.query(FCMtokens.fcm_token).where(FCMtokens.id_user == g.current_user.id).all()
+
     data = request.get_json()
+    if(data['fcm'] is not None and (data['fcm'],) not in cur_tokens):
+            new_fcm = FCMtokens(id_user = current_user.id, fcm_token = data['fcm'])
+            #current_user.set_fcm(data['fcm'])
+            db.session.add(new_fcm)
+            db.session.commit()
+            return 'added'
 
-    if(data['fcm'] is not None and data['fcm'] != cur_token):
-        g.current_user.set_fcm(data['fcm'])
-        db.session.commit()
-        return 'added'
-
-    return 'OK'
+    return 'ok'
