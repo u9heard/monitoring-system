@@ -5,7 +5,8 @@ $("#save").click(async function() {
     var boxToSend = []
     var deviceToSend = []
     for(var i=1; i<=rowCountSys; i++ ){
-        boxToSend.push({id: $("#boxes tr")[i].cells[0].textContent, 
+
+        boxToSend.push({box_active: $("#box_active" + i).is(':checked') ? 1 : 0, alert_active: $("#alert_active" + i).is(':checked') ? 1 : 0, id: $("#boxes tr")[i].cells[2].textContent, 
                         addr: $("#address_field" + i + " :selected").text()});
     }
     for(var i=1; i<=rowCountDev; i++){
@@ -16,7 +17,7 @@ $("#save").click(async function() {
     }
     console.log(JSON.stringify({box: boxToSend, device:deviceToSend}))
 
-    const res = await sendPOST('/config/replace', JSON.stringify({box: boxToSend, device:deviceToSend}))
+    const res = await sendPOST('api/config/replace', JSON.stringify({box: boxToSend, device:deviceToSend}))
     
     location.reload(true);
 });

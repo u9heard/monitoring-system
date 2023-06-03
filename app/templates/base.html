@@ -1,31 +1,30 @@
 <html>
     <head>
         {% if title %}
-        <title>{{ title }} - microblog</title>
+        <title>{{ title }}</title>
         {% else %}
-        <title>microblog</title>
+        <title>FoodRus</title>
         {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+        
     </head>
     <body>
-        <div>
-            Microblog:
-            <a href="{{ url_for('index') }}">Home</a>
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
-            {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
-            {% endif %}
-        </div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+        {% if current_user.is_anonymous == False %}
+        <nav class="navpan">
+            <a class="navpan-item" href="/">
+                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
+            </a>
+            <a class="navpan-item" href="/">Главная</a>
+            <a class="navpan-item" href="/dashboard">Мониторинг</a>
+            <a class="navpan-item" href="/config">Конфигурация</a>
+            <a class="navpan-item right" href="/logout">Выход</a>
+        </nav>
         {% endif %}
-        {% endwith %}
         {% block content %}{% endblock %}
     </body>
 </html>
+

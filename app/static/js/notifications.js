@@ -34,16 +34,23 @@ const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 getToken(messaging, {vapidKey: "BFOzrZseOAA92DvYoLs91pMGtRTG3oW8C0pM4bHUea8RceH1uwAgsHHC0yUyeUFL80xRmatCAM67jgiQjaq-yWI"}).then((currentToken) => {
     if (currentToken) {
-        fetch('fcmtoken', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "fcm": currentToken })
-        })
-        .then(response => response.text())
-        .then(response => console.log(JSON.stringify(response)))
-        console.log(currentToken)
+        if(isTokenSentToServer(currentToken) == false){
+            fetch('api/fcmtoken', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "fcm": currentToken })
+            })
+            .then(response => response.text())
+            .then(response => console.log(JSON.stringify(response)))
+            setTokenSentToServer(currentToken);
+            console.log(currentToken)
+        }
+        else{
+            console.log(currentToken)
+            console.log("token already saved")
+        }
     } else {
         Notification.requestPermission().then((permission) => {
             if (permission === 'granted') {
@@ -61,6 +68,19 @@ getToken(messaging, {vapidKey: "BFOzrZseOAA92DvYoLs91pMGtRTG3oW8C0pM4bHUea8RceH1
     
 onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
+    new Notification(payload.notification.title, payload.notification);
     
 });
+
+
+function isTokenSentToServer(currentToken) {
+    return window.localStorage.getItem('sentFirebaseMessagingToken') == currentToken;
+}
+
+function setTokenSentToServer(currentToken) {
+    window.localStorage.setItem(
+        'sentFirebaseMessagingToken',
+        currentToken ? currentToken : ''
+    );
+}
 

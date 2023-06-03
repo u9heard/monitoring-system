@@ -1,23 +1,6 @@
-<html>
-    <head>
-        <title>Create Log</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/static/css/style.css">
-        
-    </head>
-    <body>
-        <nav class="navpan">
-            <a class="navpan-item" href="/">
-                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
-            </a>
-            <a class="navpan-item" href="/">Главная</a>
-            <a class="navpan-item" href="/dashboard">Мониторинг</a>
-            <a class="navpan-item" href="/config">Конфигурация</a>
-            <a class="navpan-item right" href="/logout">Выход</a>
-        </nav>
+{% extends "base.html" %}
+
+        {% block content %}
         <main class="">
             <div class="main-container" style="padding: 10;">
                 <form action="" method="post" novalidate>
@@ -69,7 +52,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js" integrity="sha512-qF3T5CaMgSRNrxzu69V3ZrYGnrbRMIqrkE+OrE01DDsYDNo8R1VrtYL8pk+fqhKxUBXQ2z+yV/irk+AbbHtBAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script  src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
         
-        <script src="/static/js/table.js"></script>  
-         
-    </body>
-</html>
+        <script type="module" src="/static/js/table.js"></script>  
+        {% endblock %}

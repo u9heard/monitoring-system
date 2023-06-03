@@ -1,12 +1,13 @@
 from flask_login import login_required
 from app.api import bp
-from app.api.auth import token_auth
+from app.api.auth import token_auth, login_or_token_required
 from app.models import Box
 from app.api.errors import bad_request
 from flask import jsonify, request, g
 
 @bp.route('/boxes', methods=['GET'])
-@token_auth.login_required
+# @token_auth.login_required
+@login_or_token_required
 def get_boxes_api():
     boxes = Box.query.order_by(Box.id)
 

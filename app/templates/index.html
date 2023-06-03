@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
     <head>
         <title>General</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,10 @@
             <a class="navpan-item" href="/dashboard">Мониторинг</a>
             <a class="navpan-item" href="/config">Конфигурация</a>
             <a class="navpan-item right" href="/logout">Выход</a>
-        </nav>
+        </nav> -->
+        {% extends "base.html" %}
+
+        {% block content %}
         <main class="">
             <div class="main-container fit-cont" style="padding: 10;">
                 <h3>Управление записями</h3>
@@ -39,14 +42,45 @@
                             <td>{{ l.id }}</td>
                             <td>{{ l.name }}</td>
                             <td>{{ l.date }}</td>
-                            <td> <a href="{{ l.path }}" style="color:#660066">Загрузить</a> </td>
+                            <td> <p class="openPopup blue_href" data-id="{{l.id}}">Просмотр</p> </td>
                             <td> <a href="/delete/{{ l.path }}" style="color:red">Удалить</a> </td>
                         </tr>
                         {% endfor %}
                         
                     </table>
                 </div>
+                <div id="myPopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close">&times;</span>
+                        <h3>Просмотр</h3>
+                        <canvas id="myChart" style="display: block; background-color: #f0f0f0;"></canvas>
+                        <table id="myTable" class="main-table full-width">
+                            <thead>
+                                <tr>
+                                <th>Заголовок столбца 1</th>
+                                <th>Заголовок столбца 2</th>
+                                <th>Заголовок столбца 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                            </table>
+                              
+                    </div>
+                </div>
+                  
             </div>
         </main>
-    </body>
-</html>
+        <script 
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+        
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.0/chart.umd.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js" integrity="sha512-qF3T5CaMgSRNrxzu69V3ZrYGnrbRMIqrkE+OrE01DDsYDNo8R1VrtYL8pk+fqhKxUBXQ2z+yV/irk+AbbHtBAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script  src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script type="module"  src="static/js/logs.js"></script>  
+        {% endblock %}
+    <!-- </body>
+</html> -->

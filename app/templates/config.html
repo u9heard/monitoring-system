@@ -1,24 +1,6 @@
-<html>
-    <head>
-        <title>Configuration</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/static/css/style.css">
-    </head>
-    <body>
-        <nav class="navpan">
-            <a class="navpan-item" href="/">
-                <img src="/static/images/cropped-logo_bnk-03-1-small.webp">
+{% extends "base.html" %}
 
-            </a>
-            <a class="navpan-item" href="/">Главная</a>
-            <a class="navpan-item" href="/dashboard">Мониторинг</a>
-            <a class="navpan-item" href="/config">Конфигурация</a>
-            <a class="navpan-item right" href="/logout">Выход</a>
-            
-        </nav>
+        {% block content %}
         <main class="">
             <div class="main-container fit-cont" style="padding: 10px;">
                 <h3>Конфигурация системы</h3>
@@ -27,6 +9,8 @@
                     <div class="container pad_med">
                         <table id="boxes" class="main-table full-width">
                             <tr>
+                                <td>Активен</td>
+                                <td>Уведомления</td>
                                 <td>ID</td>
                                 <td>Шкаф</td>
                                 <td>Адрес</td>
@@ -35,6 +19,20 @@
                             </tr>
                             {% for dev in devices %}
                             <tr>
+                                <td><input id='box_active{{ dev.id }}' type="checkbox" 
+                                    {% if dev.box_active == 1 %} 
+                                        checked 
+                                    {% else %}  
+                                        ' '
+                                    {% endif %}
+                                </td>
+                                <td><input id='alert_active{{ dev.id }}' type="checkbox" 
+                                    {% if dev.alert_active == 1 %} 
+                                        checked 
+                                    {% else %}  
+                                        ' '
+                                    {% endif %}
+                                </td>
                                 <td>{{ dev.id }}</td>
                                 <td>{{ dev.name }}</td>
                                 <td>{{ dev.address }}</td>
@@ -88,6 +86,4 @@
             integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
             crossorigin="anonymous"></script>
         <script  src="static/js/config.js"></script> 
-        
-    </body>
-</html>
+        {% endblock %}

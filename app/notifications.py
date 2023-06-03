@@ -1,15 +1,14 @@
 from app import firebase_admin
 from app import db
-from app.models import User
+from app.models import User, FCMtokens
 from firebase_admin import messaging
 
 
 def send_to_all(title, messag):
-    users = User.query.all()
+    fcm = FCMtokens.query.all()
     rtokens = []
-    for u in users:
-        if u.fcmtoken is not None:
-            rtokens.append(u.fcmtoken)
+    for u in fcm:
+        rtokens.append(fcm.fcm_token)
     
     message = messaging.MulticastMessage(
         notification=messaging.Notification(

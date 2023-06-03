@@ -10,7 +10,6 @@ from sqlalchemy.sql import text
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
-	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 
 	token = db.Column(db.String(32),index=True, unique=True)
@@ -31,13 +30,13 @@ class User(UserMixin, db.Model):
 	# 	return self.fcmtoken
 	
 	#TOKENS
-	def get_token(self, expires_in=3600):
+	def get_token(self, expires_in=24):
 		now = datetime.now()
 
 		if self.token and self.token_expiration > now+timedelta(seconds=60):
 			return self.token
 		self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
-		self.token_expiration = now + timedelta(seconds=expires_in)
+		self.token_expiration = now + timedelta(hours=expires_in)
 		db.session.add(self)
 		return self.token
 	
@@ -82,6 +81,7 @@ class Box(db.Model):
 	Alerts = db.relationship('Alert', backref='onBox', lazy='dynamic')
 	id_device = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True)
 	alert_active = db.Column(db.Integer, nullable = False, server_default=text("0"))
+	box_active = db.Column(db.Integer, nullable = False, server_default=text("0"))
 	
 	def __repr__(self): #Сообщает ка кпечатать этот объект
 		return '<Box {}>'.format(self.name)

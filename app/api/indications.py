@@ -1,6 +1,6 @@
 from flask_login import login_required
 from app.api import bp
-from app.api.auth import token_auth
+from app.api.auth import token_auth, login_or_token_required
 from app.models import Indication, Box, Device, Alert
 from app.api.errors import bad_request
 from flask import jsonify, request, g
@@ -11,20 +11,6 @@ from app import notifications
 
 
 @bp.route('/indications/add', methods=['POST'])
-# @token_auth.login_required
-# def add_ind():
-#     data = request.get_json()
-	
-#     box = Box.query.get(data['id'])
-#     if box is not None:
-#         ind = Indication(onBox=box, temp = data['temp'], hum=data['hum'], 
-#                     time = datetime.now())
-#         db.session.add(ind)
-#         db.session.commit()
-        
-#         return "OK"
-#     else:
-#         return "not ok"
 def add_to_db():
     data = request.get_json()
 
@@ -46,6 +32,10 @@ def add_to_db():
         db.session.commit()
     else:
         box = Box.query.where(Box.id_device == device_from.id).first()
+
+        if box.box_active == 0:
+            return "OK"
+
         current_date = datetime.now()
         if box.alert_active == 1:
             last_alert = Alert.query.where(Alert.id_box == box.id).order_by(desc(Alert.date)).first()
@@ -70,37 +60,26 @@ def add_to_db():
         db.session.commit()
 
     return "OK"
-
-    # box = Box.query.get(data['id'])
-    # if box is not None:
-    #     ind = Indication(onBox = box, temp = data['temp'], hum = data['hum'], 
-    #             time = datetime.now())
-    #     db.session.add(ind)
-    #     db.session.commit()
-
-    #     return "OK"
-    # else:
-    #     return "404"
     
 
-@app.route('/indications/last')
-@login_required
-def get_online_web():
-    return get_online()
+# @app.route('/indications/last')
+# @login_required
+# def get_online_web():
+#     return get_online()
 
 @bp.route('/indications/last')
-@token_auth.login_required
+@login_or_token_required
 def get_online_api():
     return get_online()
 
-@app.route('/indications/<string:id>', methods=['GET'])
-#@login_required
-def get_inds_web(id):
-    return get_inds(id)
+# @app.route('/indications/<string:id>', methods=['GET'])
+# #@login_required
+# def get_inds_web(id):
+#     return get_inds(id)
 
 
 @bp.route('/indications/<string:id>', methods=['GET'])
-@token_auth.login_required
+@login_or_token_required
 def get_inds_api(id):
     
     return get_inds(id)
@@ -148,7 +127,7 @@ def get_online():
 
     max_time = db.session.query(Indication.id_box.label("bx"), func.max(Indication.time).label("tm")).group_by(Indication.id_box).cte(name="max_time", recursive=True)
 
-    last_inds = db.session.query(Indication.id_box, Box.name, Indication.temp, Indication.hum, Indication.time).join(max_time, Indication.id_box == max_time.c.bx).join(Box, Box.id == Indication.id_box).where(Indication.time == max_time.c.tm).filter(Indication.time > datetime.now()-timedelta(hours=24))
+    last_inds = db.session.query(Indication.id_box, Box.name, Indication.temp, Indication.hum, Indication.time).join(max_time, Indication.id_box == max_time.c.bx).join(Box, Box.id == Indication.id_box).where(Indication.time == max_time.c.tm).filter(Indication.time > datetime.now()-timedelta(hours=1))
 
 
     if not last_inds:
@@ -190,9 +169,8 @@ def check_hum(box, hum, date):
 def sensor_fault():
     data = request.get_json()
     device_fault = Device.query.where(Device.address==data["addr"]).first()
-
     box_fault = Box.query.where(Box.id_device == device_fault.id)
 
-    new_alert = Alert(title='Ошибка моста или датчика', body=box_fault.name)
+    new_alert = Alert(title = box_fault.name, body='Ошибка чтения')
 
-    return "TODO"
+    return "OK"

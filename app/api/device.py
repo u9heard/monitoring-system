@@ -1,6 +1,6 @@
 from flask_login import login_required
 from app.api import bp
-from app.api.auth import token_auth
+from app.api.auth import token_auth, login_or_token_required
 from app.models import Box, Device
 from app.api.errors import bad_request
 from flask import jsonify, request, g, render_template
@@ -9,26 +9,28 @@ from app import app, db
 
 
 
-@app.route('/config/replace', methods=['POST'])
-@login_required
-def replace_addr_web():
-    return replace_addr()
+# @app.route('/config/replace', methods=['POST'])
+# @login_or_token_required
+# def replace_addr_web():
+#     return replace_addr()
 
 
 @bp.route('/config/replace', methods=['POST'])
-
+@login_or_token_required
 def replace_addr_api():
     return replace_addr()
 
 @bp.route('/config', methods=['GET'])
-@token_auth.login_required
+@login_or_token_required
 def configuration_api():
-    devices = db.session.query(Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True).order_by(Box.id)
+    devices = db.session.query(Box.id, Box.box_active, Box.alert_active, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True).order_by(Box.id)
 
     addr_list = []
 
     for a in devices:
         addr_list.append({
+            "box_active": a.box_active,
+            "alert_active": a.alert_active,
             "box_id": a.id,
             "address": a.address,
             "box_name": a.name
@@ -44,9 +46,7 @@ def configuration_api():
 @token_auth.login_required
 def get_devices():
     devices = Device.query.all()
-    
     device_list = []
-
     for a in devices:
         device_list.append({
             "id": a.id,
@@ -55,14 +55,13 @@ def get_devices():
             "correct_h": a.correct_h
         })
 
-
     return jsonify({"device_list":device_list})
 
 
 @app.route('/config', methods=['GET'])
 @login_required
 def configuration_web():
-    devices = db.session.query(Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True).order_by(Box.id)
+    devices = db.session.query(Box.box_active, Box.alert_active, Box.id, Device.address, Box.name).join(Device, Device.id == Box.id_device, isouter = True).order_by(Box.id)
 
     dev_addr = Device.query.all()
 
@@ -77,6 +76,7 @@ def configuration_web():
 def replace_addr():
     req_data = request.json
     
+
     if "box" in req_data:
         for req in req_data["box"]:
             if req["addr"] != "Не заменять":  
@@ -90,6 +90,12 @@ def replace_addr():
 
                     db.session.query(Box).filter(Box.id == req["id"]).update({Box.id_device: device_id.id})
                     # db.session.commit()
+        
+        for req in req_data["box"]:
+            db.session.query(Box).filter(Box.id == req["id"]).update({Box.alert_active: req["alert_active"], 
+                                                                    Box.box_active: req["box_active"]})
+    
+
 
     if "device" in req_data:
         for req in req_data["device"]:
